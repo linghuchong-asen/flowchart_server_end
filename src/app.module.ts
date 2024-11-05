@@ -5,6 +5,7 @@ import { PostsModule } from './posts/posts.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import envConfig from '../config/env';
+import { PostsEntity } from './posts/posts.entity';
 
 /* nest项目可以理解为由好多模块组成的，app.module.ts是项目的根模块 */
 @Module({
@@ -19,7 +20,7 @@ import envConfig from '../config/env';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         type: 'mysql',
-        entities: [], // 数据表实体
+        entities: [PostsEntity], // 数据表实体
         host: configService.get('DB_HOST', 'localhost'), // 后面的localhost是当前没有配置环境变量时，默认值
         port: configService.get<number>('DB_PORT', 3306),
         username: configService.get('DB_USER', 'root'),

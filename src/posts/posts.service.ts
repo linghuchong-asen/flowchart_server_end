@@ -2,9 +2,8 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostsEntity } from './posts.entity';
 import { Repository } from 'typeorm';
-import { error } from 'console';
 
-interface PostRo {
+export interface PostRo {
   list: PostsEntity[];
   count: number;
 }
