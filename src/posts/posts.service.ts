@@ -18,13 +18,13 @@ export class PostsService {
   async create(post: Partial<PostsEntity>): Promise<PostsEntity> {
     const { title } = post;
     if (!title) {
-      throw new HttpException('文章标题不能为空', 401);
+      throw new HttpException('文章标题不能为空', 400);
     }
     const doc = await this.postsRepository.findOne({
       where: { title },
     });
     if (doc) {
-      throw new HttpException('文章标题已存在', 401);
+      throw new HttpException('文章标题已存在', 409);
     }
 
     return await this.postsRepository.save(post);
@@ -34,7 +34,7 @@ export class PostsService {
   async findAll(query): Promise<PostRo> {
     const qb = this.postsRepository.createQueryBuilder('post');
     qb.where('1=1');
-    qb.orderBy('post.create_time', 'DESC'); // DESC是降序的意思，升序：ASC
+    qb.orderBy('post.create_date', 'DESC'); // DESC是降序的意思，升序：ASC
 
     const count = await qb.getCount();
     const { pageNum = 1, pageSize = 10, ...params } = query;
@@ -50,12 +50,15 @@ export class PostsService {
 
   /** 获取指定文章 */
   async findById(id): Promise<PostsEntity> {
-    return await this.postsRepository.findOne(id);
+    return await this.postsRepository.findOne({
+      select: ['id', 'title', 'content'], // 指定返回那几列
+      where: { id }, // 查询id符合条件的行
+    });
   }
 
   /** 更新文章 */
   async updateById(id, post): Promise<PostsEntity> {
-    const existPost = await this.postsRepository.findOne(id);
+    const existPost = await this.postsRepository.findOne({ where: { id } });
     if (!existPost) {
       throw new HttpException(`id为${id}的文章不存在`, 401);
     }

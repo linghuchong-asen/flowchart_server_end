@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { PostRo, PostsService } from './posts.service';
 
 @Controller('posts') // 路径为/posts
@@ -30,5 +39,22 @@ export class PostsController {
   /* 获取路由参数id,@Query是所有路由参数，@Param是获取指定路由参数 */
   async findById(@Param('id') id) {
     return await this.postsService.findById(id);
+  }
+
+  /** 更新文章
+   * @param id
+   * @param post */
+  /*获取路由参数id,@Query是所有路由参数(get),@Param是获取指定路由参数@Body用于post或put、delete请求体参数*/
+  @Put(':id')
+  async update(@Param('id') id, @Body() post) {
+    return await this.postsService.updateById(id, post);
+  }
+
+  /** 删除文章
+   *  @param id
+   */
+  @Delete(':id')
+  async remove(@Param('id') id) {
+    return await this.postsService.removeById(id);
   }
 }

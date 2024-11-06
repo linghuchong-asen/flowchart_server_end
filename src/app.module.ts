@@ -20,7 +20,8 @@ import { PostsEntity } from './posts/posts.entity';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         type: 'mysql',
-        entities: [PostsEntity], // 数据表实体
+        // entities: [PostsEntity], // 数据表实体
+        autoLoadEntities: true, // 自动加载实体，不用崽崽entities数组中一个一个添加了，不过要配合ypeOrmModule.forFeature()将对应的实体注册到nestjs模块中
         host: configService.get('DB_HOST', 'localhost'), // 后面的localhost是当前没有配置环境变量时，默认值
         port: configService.get<number>('DB_PORT', 3306),
         username: configService.get('DB_USER', 'root'),
