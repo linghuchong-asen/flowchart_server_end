@@ -13,6 +13,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp(); // 获取请求上下文
     const response = ctx.getResponse(); // 获取请求上下文中的 response对象
     const status = exception.getStatus(); // 获取异常状态码
+    const exceptionResponse = exception.getResponse();
+    let validateMessage: string = '';
+    if (typeof exceptionResponse === 'object') {
+      validateMessage =
+        typeof exceptionResponse['message'] === 'string'
+          ? exceptionResponse['message']
+          : exceptionResponse['message'][0];
+    }
 
     // 设置错误信息
     const message = exception.message
@@ -20,7 +28,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       : `${status >= 500 ? 'Server Error' : 'Client Error'}`;
     const errorResponse = {
       data: {},
-      message,
+      message: validateMessage || message,
       code: -1,
       request: `${ctx.getRequest().method} ${ctx.getRequest().url}`,
     };

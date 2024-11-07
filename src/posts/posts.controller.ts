@@ -9,6 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { PostRo, PostsService } from './posts.service';
+import { CreatePostDto } from './dto/create_post.dto';
 
 @Controller('posts') // 路径为/posts
 export class PostsController {
@@ -19,7 +20,7 @@ export class PostsController {
    */
   /* @Body() 它的主要作用是从 HTTP 请求的请求体（Request Body）中提取数据，并将其传递给控制器方法中的参数。*/
   @Post()
-  async create(@Body() post) {
+  async create(@Body() post: CreatePostDto) {
     return this.postsService.create(post);
   }
 

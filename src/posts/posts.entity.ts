@@ -5,7 +5,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
  * @Author: yangsen
  * @Date: 2024-11-03 22:27:54
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-04 21:46:22
+ * @LastEditTime: 2024-11-07 22:38:05
  */
 @Entity()
 export class PostsEntity {
@@ -18,7 +18,7 @@ export class PostsEntity {
   @Column('text')
   content: string;
   @Column({ default: '' })
-  thumb_url: string;
+  cover_url: string;
   @Column('tinyint')
   type: number;
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
