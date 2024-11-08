@@ -20,7 +20,7 @@ export class PostsEntity {
   @Column({ default: '' })
   cover_url: string;
   @Column('tinyint')
-  type: number;
+  category: number;
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   create_date: Date;
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

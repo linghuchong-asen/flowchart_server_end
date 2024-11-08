@@ -19,7 +19,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       validateMessage =
         typeof exceptionResponse['message'] === 'string'
           ? exceptionResponse['message']
-          : exceptionResponse['message'][0];
+          : exceptionResponse['message'];
     }
 
     // 设置错误信息
