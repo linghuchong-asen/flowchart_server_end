@@ -8,7 +8,7 @@ import logger from '../../../utils/log/logger.service';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  /* exception: 捕获到的 HTTP 异常对象。
+  /* exception: 捕获到的 HTTP 异常对象。注意是捕获到的异常，比如代码中写了throw new Error或者是validator验证抛出异常，而不是http请求返回的异常。
   host: 当前请求的上下文对象，包含请求和响应的信息。 */
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp(); // 获取请求上下文
