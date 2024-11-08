@@ -4,6 +4,7 @@ import {
   ExceptionFilter,
   HttpException,
 } from '@nestjs/common';
+import logger from '../../../utils/log/logger.service';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -13,13 +14,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp(); // 获取请求上下文
     const response = ctx.getResponse(); // 获取请求上下文中的 response对象
     const status = exception.getStatus(); // 获取异常状态码
-    const exceptionResponse = exception.getResponse();
-    let validateMessage: string = '';
+    const exceptionResponse = exception.getResponse(); // 获取异常响应数据,这个只是错误信息，ctx.getResponse()获取的是response对象
+    let validateMessage: string;
     if (typeof exceptionResponse === 'object') {
-      validateMessage =
-        typeof exceptionResponse['message'] === 'string'
-          ? exceptionResponse['message']
-          : exceptionResponse['message'];
+      validateMessage = exceptionResponse['message'];
     }
 
     // 设置错误信息
@@ -32,6 +30,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
       code: -1,
       request: `${ctx.getRequest().method} ${ctx.getRequest().url}`,
     };
+
+    // 记录错误日志
+    logger.error(validateMessage || message);
 
     // 设置返回的状态码， 请求头，发送错误信息
     response.status(status);
