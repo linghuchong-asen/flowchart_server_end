@@ -25,4 +25,15 @@ export class UserService {
     const newUser = await this.userRepository.create(createUser);
     return await this.userRepository.save(newUser);
   }
+
+  /** 更新用户头像 */
+  async updateAvatar(avatar: string) {
+    // TODO 如何基于token获取id
+    // const user = await this.userRepository.findOne({ where: { id } });
+    // if (!user) {
+    //   throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+    // }
+    // user.avatar = avatar;
+    // return await this.userRepository.save(user);
+  }
 }

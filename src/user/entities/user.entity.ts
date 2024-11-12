@@ -3,7 +3,7 @@
  * @Author: yangsen
  * @Date: 2024-11-11 10:30:10
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-11 15:51:13
+ * @LastEditTime: 2024-11-12 17:40:55
  */
 import {
   BeforeInsert,
@@ -13,6 +13,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
+import * as path from 'path';
 
 @Entity('user') // user即为表名
 export class UserEntity {
@@ -28,7 +29,7 @@ export class UserEntity {
   @Column()
   password: string;
 
-  @Column()
+  @Column({ default: path.resolve(__dirname, '../../public/avatar.jpg') })
   avatar: string;
 
   @Column()

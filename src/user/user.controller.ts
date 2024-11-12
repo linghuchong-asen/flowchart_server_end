@@ -34,7 +34,7 @@ export class UserController {
   */
   @Post('register')
   // @UseInterceptors(
-  //   //  NOTE:第一个参数要和传参中file类型的字段名称一致
+  //  NOTE:第一个参数要和传参中file类型的字段名称一致
   //   FilesInterceptor('avatar', 10, {
   //     /*  diskStorage 来配置文件存储路径和文件命名规则 */
   //     storage: diskStorage({
@@ -63,15 +63,9 @@ export class UserController {
   }
 
   // 将注册和更新头像的接口分开
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('avatar'), 1)
+  @Patch('upload')
+  @UseInterceptors(FileInterceptor('avatar'))
   updateAvatar(@UploadedFile() file: Express.Multer.File) {
     return file;
   }
-
-  @Post('login')
-  async login(@Body() createUserDto: CreateUserDto) {}
-
-  @Post('logout')
-  async logout() {}
 }
