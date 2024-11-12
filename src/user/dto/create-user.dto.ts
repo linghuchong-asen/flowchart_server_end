@@ -8,7 +8,7 @@ export class CreateUserDto {
   readonly nickname: string;
   @IsNotEmpty({ message: '密码不能为空' })
   readonly password: string;
-  readonly avatar: string;
+  readonly avatar?: string;
   readonly email: string;
   readonly role: string;
   @IsFieldNotProvided()

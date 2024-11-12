@@ -20,6 +20,7 @@ export class UserService {
     if (existUser) {
       throw new HttpException('用户名已存在', HttpStatus.BAD_REQUEST);
     }
+
     /* create方法只是创建了User对象，save方法才是将User对象保存到数据库中 */
     const newUser = await this.userRepository.create(createUser);
     return await this.userRepository.save(newUser);
