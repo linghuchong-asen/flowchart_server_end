@@ -13,6 +13,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp(); // 获取请求上下文
     const response = ctx.getResponse(); // 获取请求上下文中的 response对象
+    const request = ctx.getRequest();
     const status = exception.getStatus(); // 获取异常状态码
     const exceptionResponse = exception.getResponse(); // 获取异常响应数据,这个只是错误信息，ctx.getResponse()获取的是response对象
     let validateMessage: string;

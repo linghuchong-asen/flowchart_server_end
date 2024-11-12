@@ -16,8 +16,8 @@ export class TransformInterceptor implements NestInterceptor {
     context.getArgs();
     context.getClass();
     const body = context.switchToHttp().getRequest().body;
-    console.log('拦截器', body);
-    new Logger('拦截器').log(body);
+    // console.log('拦截器', body);
+    // new Logger('拦截器').log(body);
 
     context.switchToHttp().getResponse();
     return next.handle().pipe(
