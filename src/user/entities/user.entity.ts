@@ -3,7 +3,7 @@
  * @Author: yangsen
  * @Date: 2024-11-11 10:30:10
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-12 17:40:55
+ * @LastEditTime: 2024-11-12 18:37:41
  */
 import {
   BeforeInsert,
@@ -14,6 +14,7 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as path from 'path';
+import { Exclude } from 'class-transformer';
 
 @Entity('user') // user即为表名
 export class UserEntity {
@@ -27,6 +28,7 @@ export class UserEntity {
   nickname: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column({ default: path.resolve(__dirname, '../../public/avatar.jpg') })
