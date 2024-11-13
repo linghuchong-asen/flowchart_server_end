@@ -10,6 +10,9 @@ import {
   UploadedFile,
   UploadedFiles,
   Logger,
+  ClassSerializerInterceptor,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -21,6 +24,8 @@ import {
 } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as path from 'path';
+import { UserEntity } from './entities/user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 const logger = new Logger('UserController');
 @Controller('user')
@@ -33,6 +38,7 @@ export class UserController {
      FileFieldsInterceptor：一个参数可以是数组，适合当传参中有多个字段是file类型
   */
   @Post('register')
+  @UseInterceptors(ClassSerializerInterceptor)
   // @UseInterceptors(
   //  NOTE:第一个参数要和传参中file类型的字段名称一致
   //   FilesInterceptor('avatar', 10, {
@@ -62,10 +68,23 @@ export class UserController {
     return await this.userService.register(createUserDto);
   }
 
-  // 将注册和更新头像的接口分开
-  @Patch('upload')
-  @UseInterceptors(FileInterceptor('avatar'))
-  updateAvatar(@UploadedFile() file: Express.Multer.File) {
-    return file;
+  // 注册时只需要用户名和密码，头像角色等信息可以登录后修改
+  @Patch('update')
+  // @UseInterceptors(FileInterceptor('avatar'))
+  @UseInterceptors(
+    //  NOTE:第一个参数要和传参中file类型的字段名称一致
+    FilesInterceptor('avatar', 10),
+  )
+  @UseGuards(AuthGuard('jwt'))
+  async update(
+    @UploadedFiles() files: Express.Multer.File[],
+    @Body() userInfo: UpdateUserDto,
+    @Req() req,
+  ) {
+    // TODO: 想要的是文件路径，在哪里获取
+    logger.log(req);
+    logger.log(files);
+    logger.log(userInfo);
+    // return await this.userService.update(files, userInfo, req.user);
   }
 }

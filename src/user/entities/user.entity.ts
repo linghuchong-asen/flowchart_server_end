@@ -3,7 +3,7 @@
  * @Author: yangsen
  * @Date: 2024-11-11 10:30:10
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-12 18:37:41
+ * @LastEditTime: 2024-11-13 14:45:08
  */
 import {
   BeforeInsert,
@@ -16,10 +16,16 @@ import * as bcrypt from 'bcryptjs';
 import * as path from 'path';
 import { Exclude } from 'class-transformer';
 
+export enum RoleEnum {
+  ROOT = 'root',
+  AUTHOR = 'author',
+  VISITOR = 'visitor',
+}
+
 @Entity('user') // user即为表名
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column({ length: 100 })
   username: string;
@@ -37,8 +43,9 @@ export class UserEntity {
   @Column()
   email: string;
 
-  @Column('simple-enum', {
-    enum: ['root', 'author', 'visitor'],
+  @Column({
+    type: 'enum',
+    enum: RoleEnum,
     default: 'visitor',
   })
   role: string; // 用户角色

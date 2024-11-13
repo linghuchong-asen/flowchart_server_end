@@ -26,14 +26,19 @@ export class UserService {
     return await this.userRepository.save(newUser);
   }
 
-  /** 更新用户头像 */
-  async updateAvatar(avatar: string) {
-    // TODO 如何基于token获取id
-    // const user = await this.userRepository.findOne({ where: { id } });
-    // if (!user) {
-    //   throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
-    // }
-    // user.avatar = avatar;
-    // return await this.userRepository.save(user);
+  /** 更新用户信息 */
+  async update(user: Partial<UserEntity>) {
+    const existUser = await this.userRepository.findOne({
+      where: { id: user.id },
+    });
+    if (!existUser) {
+      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
+    const updateUser = this.userRepository.merge(existUser, user);
+    return await this.userRepository.save(updateUser);
+  }
+
+  async getUserById(id: string) {
+    const user = await this.userRepository.findOne({ where: { id } });
   }
 }

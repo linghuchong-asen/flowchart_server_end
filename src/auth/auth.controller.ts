@@ -1,13 +1,46 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+  Req,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from 'src/user/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    private readonly authService: AuthService,
+  ) {}
 
   @Post('login')
-  async login(@Body() loginDto: LoginDto) {}
+  @UseGuards(AuthGuard('local')) //UseGuards装饰器可以传入多个认证守卫，在接收到对应请求时，会依次调用认证守卫
+  @UseInterceptors(ClassSerializerInterceptor)
+  async login(@Body() loginInfo: LoginDto, @Req() req) {
+    // 逻辑能走到这里，证明用户登录认证已经通过
+    const existUser = this.userRepository.findOne({
+      where: { username: loginInfo.username },
+    });
+    if (!existUser) {
+      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
+    const token = await this.authService.getToken({
+      id: (await existUser).id,
+      ...loginInfo,
+    });
+    return token;
+  }
 
   // 通过前端删除token的方式退出登录
 }
