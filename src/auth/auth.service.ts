@@ -11,8 +11,9 @@ export class AuthService {
   ) {}
 
   createToken(user: Partial<UserEntity>) {
+    console.log(this.configService.get('JWT_SECRET'));
     return this.jwtService.sign(user, {
-      privateKey: this.configService.get('JWT_SECRET'),
+      secret: this.configService.get('JWT_SECRET'),
     });
   }
 
@@ -20,7 +21,7 @@ export class AuthService {
     const token = this.createToken({
       id: user.id,
       username: user.username,
-      role: user.role,
+      // role: user.role,
     });
     return { token };
   }
