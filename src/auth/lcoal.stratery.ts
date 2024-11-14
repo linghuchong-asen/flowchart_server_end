@@ -18,6 +18,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     } as IStrategyOptions);
   }
 
+  /* validate方法内必须要查询来带有密码的user信息，并且返回给passport，passport内部会调用validate方法 */
   async validate(username: string, password: string) {
     const user = await this.userRepository
       .createQueryBuilder('user')
@@ -27,7 +28,6 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     if (!user) {
       throw new BadRequestException('用户不存在');
     }
-
     if (!bcrypt.compareSync(password, user.password)) {
       throw new BadRequestException('密码不正确');
     }
