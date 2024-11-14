@@ -54,15 +54,30 @@ export class UserController {
     //  NOTE:第一个参数要和传参中file类型的字段名称一致
     FilesInterceptor('avatar', 10),
   )
+  @UseInterceptors(ClassSerializerInterceptor)
   async update(
     @UploadedFiles() files: Express.Multer.File[],
     @Body() userInfo: UpdateUserDto,
     @Req() req,
   ) {
     // TODO: 想要的是文件路径，在哪里获取
-    logger.log(req);
-    logger.log(files);
-    logger.log(userInfo);
-    // return await this.userService.update(files, userInfo, req.user);
+    logger.log(req); // req.user即为数据库中查询出来user的完整信息，是在JwtStrategy的validate方法中返回的
+    logger.log(files); // files.path即为文件绝对路径
+    logger.log(userInfo); // 此次传入的非file类型字段
+    const newUser = { id: req.user.id, avatar: files[0].path, ...userInfo };
+    return await this.userService.update(newUser);
+  }
+
+  /** 获取用户信息 */
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  getUserInfo(@Req() req) {
+    const user = req.user as UserEntity;
+    const resAvatarPath = user.avatar.split('\\');
+    const userInfo = {
+      ...req.user,
+      avatar: `localhost:3001/${resAvatarPath}`,
+    };
+    return userInfo;
   }
 }

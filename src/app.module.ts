@@ -7,6 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import envConfig from '../config/env';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 
 /* nest项目可以理解为由好多模块组成的，app.module.ts是项目的根模块 */
 @Module({
@@ -31,6 +33,10 @@ import { AuthModule } from './auth/auth.module';
         timezone: '+08:00', // 服务器上配置的时区
         synchronize: true, // 根据实体自动创建数据库表，生产环境建议关闭
       }),
+    }),
+    ServeStaticModule.forRoot({
+      // 静态资源目录，项目启动后代码会被打包进dist文件夹
+      rootPath: path.resolve(__dirname, '../../', 'uploads'),
     }),
     PostsModule,
     UserModule,

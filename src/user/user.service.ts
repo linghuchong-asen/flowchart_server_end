@@ -1,4 +1,11 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  UseInterceptors,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -38,6 +45,7 @@ export class UserService {
     return await this.userRepository.save(updateUser);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   async getUserById(id: string) {
     const user = await this.userRepository.findOne({ where: { id } });
     return user;

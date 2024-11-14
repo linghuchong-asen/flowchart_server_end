@@ -5,7 +5,11 @@ import { RoleEnum, UserEntity } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { AuthService } from './auth.service';
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
-import { UnauthorizedException } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  UnauthorizedException,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 
 interface jwtPayload {
@@ -31,6 +35,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   /* NOTE: payload是已经通过passport-jwt解析过了的负载 */
+  @UseInterceptors(ClassSerializerInterceptor)
   async validate(payload: jwtPayload) {
     const userId = payload.id;
     const existUser = await this.userService.getUserById(userId);
