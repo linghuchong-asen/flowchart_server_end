@@ -35,7 +35,7 @@ import * as path from 'path';
       }),
     }),
     ServeStaticModule.forRoot({
-      // 静态资源目录，项目启动后代码会被打包进dist文件夹
+      // 静态资源目录，项目启动后代码会被打包进dist文件夹;这里要结合multer储存位置决定
       rootPath: path.resolve(__dirname, '../../', 'uploads'),
     }),
     PostsModule,
