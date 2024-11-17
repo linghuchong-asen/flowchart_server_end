@@ -29,14 +29,14 @@ export class AuthController {
   @UseInterceptors(ClassSerializerInterceptor)
   async login(@Body() loginInfo: LoginDto, @Req() req) {
     // 逻辑能走到这里，证明用户登录认证已经通过
-    const existUser = this.userRepository.findOne({
+    const existUser = await this.userRepository.findOne({
       where: { username: loginInfo.username },
     });
     if (!existUser) {
       throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
     }
     const token = await this.authService.getToken({
-      id: (await existUser).id,
+      id: existUser.id,
       ...loginInfo,
     });
     return token;
