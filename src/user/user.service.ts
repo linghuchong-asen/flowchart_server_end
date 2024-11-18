@@ -47,7 +47,6 @@ export class UserService {
 
   async getUserById(id: string) {
     const user = await this.userRepository.findOne({ where: { id } });
-    // todo:
     // NOTE: 配置文件路径要结合multer的文件存储路径和serve-static静态服务的路径
     const userFileName = user.avatar.split('\\').pop();
     user.avatar = `localhost:3001/${userFileName}`;

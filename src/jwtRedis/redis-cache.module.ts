@@ -29,8 +29,8 @@ import { createClient, RedisModules } from 'redis';
     {
       // 'REDIS_CLIENT',是服务的标识符，可以在模块中使用作为依赖注入使用，如 @Inject('REDIS_CLIENT') private readonly redisClient: RedisModules
       provide: 'REDIS_CLIENT',
-      // todo: inject有什么作用，是必须的吗？inject 是必需的，用于注入依赖项（如 ConfigService），以便在 useFactory 中使用。
-      // inject: [ConfigService],
+      // inject有什么作用，是必须的吗？inject 是必需的，用于注入依赖项（如 ConfigService），以便在 useFactory 中使用。不然在编译阶段就报错了
+      inject: [ConfigService],
       async useFactory(configService: ConfigService) {
         const client = createClient({
           socket: {

@@ -1,6 +1,6 @@
 
 Todo:
   ✔ Item @started(24-11-15 17:44) @done(24-11-15 17:44) @lasted(46s)
-  ☐ 在nestjs中使用Redis @est()
-  ☐ 如何用redis实现用户黑名单
+  ✔ 在nestjs中使用Redis @est() @done(24-11-18 09:43)
+  ✔ 如何用redis实现用户黑名单 @done(24-11-18 10:31)
   ☐ jwt验证通过后增加黑名单校验
