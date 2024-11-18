@@ -9,8 +9,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { UserService } from 'src/user/user.service';
-import { RedisCacheService } from 'src/jwtRedis/redis-cache.service';
-import { RedisCacheModule } from 'src/jwtRedis/redis-cache.module';
+import { RedisCacheService } from 'src/jwtRedis/redis_cache.service';
+import { RedisCacheModule } from 'src/jwtRedis/redis_cache.module';
 
 const jwtModule = JwtModule.registerAsync({
   inject: [ConfigService],

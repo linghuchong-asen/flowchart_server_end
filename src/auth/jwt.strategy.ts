@@ -1,4 +1,4 @@
-import { RedisCacheService } from './../jwtRedis/redis-cache.service';
+import { RedisCacheService } from '../jwtRedis/redis_cache.service';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';

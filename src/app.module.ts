@@ -9,7 +9,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
-import { RedisCacheModule } from './jwtRedis/redis-cache.module';
+import { RedisCacheModule } from './jwtRedis/redis_cache.module';
 
 /* nest项目可以理解为由好多模块组成的，app.module.ts是项目的根模块 */
 @Module({
