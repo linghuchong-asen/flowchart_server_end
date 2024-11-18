@@ -1,17 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { EditorDocument, EditorDocumentSchema } from './editor_document.schema';
 
+/* 编辑器文档保存至MongoDB模块 */
 @Module({
   imports: [
-    MongooseModule.forRootAsync({
-      imports: [ConfigService],
-      inject: [ConfigService],
-      useFactory: async (config: ConfigService) => ({
-        // TODO:不需要指定端口号和密码吗
-        uri: config.get('MONGO_DB_HOST'),
-      }),
-    }),
+    MongooseModule.forFeature([
+      { name: EditorDocument.name, schema: EditorDocumentSchema },
+    ]),
   ],
   controllers: [],
   providers: [],

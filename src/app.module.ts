@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
 import { RedisCacheModule } from './jwtRedis/redis_cache.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 /* nest项目可以理解为由好多模块组成的，app.module.ts是项目的根模块 */
 @Module({
@@ -33,6 +34,14 @@ import { RedisCacheModule } from './jwtRedis/redis_cache.module';
         database: configService.get('DB_DATABASE', 'blog'),
         timezone: '+08:00', // 服务器上配置的时区
         synchronize: true, // 根据实体自动创建数据库表，生产环境建议关闭
+      }),
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigService],
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService) => ({
+        // TODO:不需要指定端口号和密码吗
+        uri: config.get('MONGO_DB_HOST'),
       }),
     }),
     ServeStaticModule.forRoot({
