@@ -11,6 +11,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
 import { RedisCacheModule } from './jwtRedis/redis_cache.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { EditorDocumentModule } from './editorDocument/editor_document.module';
 
 /* nest项目可以理解为由好多模块组成的，app.module.ts是项目的根模块 */
 @Module({
@@ -37,11 +38,21 @@ import { MongooseModule } from '@nestjs/mongoose';
       }),
     }),
     MongooseModule.forRootAsync({
-      imports: [ConfigService],
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => ({
-        // TODO:不需要指定端口号和密码吗
-        uri: config.get('MONGO_DB_HOST'),
+        /* 不需要指定端口号和密码吗?
+        在mongoose中，端口号、密码、数据库都是通过uri指定的 */
+        uri: `mongodb://${config.get(
+          'MONGO_DB_USER_NAME',
+          'devUser',
+        )}:${config.get('MONGO_DB_PASSWD', '123456')}@${config.get(
+          'MONGO_DB_HOST',
+          'localhost',
+        )}:${config.get('MONGO_DB_PORT', 27017)}/${config.get(
+          'MONGO_DB_NAME',
+          'flowchartEditor',
+        )}`,
       }),
     }),
     ServeStaticModule.forRoot({
@@ -52,8 +63,9 @@ import { MongooseModule } from '@nestjs/mongoose';
     UserModule,
     AuthModule,
     RedisCacheModule,
+    EditorDocumentModule,
   ],
   controllers: [AppController], // 处理http请求，包括路由控制，向客户端返回响应
   providers: [AppService], // 服务提供者，处理具体的业务逻辑
 })
-export class AppModule {}
+export class AppModule { }
