@@ -2,6 +2,7 @@ import { Logger } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 
+/* 将日志打印进error.log文件 */
 class LoggerService {
   private logPath = path.join(__dirname, 'error.log');
 
