@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
-import { Module, Inject } from '@nestjs/common';
+import { Module, Inject, OnModuleInit } from '@nestjs/common';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
+import { ProjectSearchService } from './project_search.service';
 
 @Module({
   imports: [
@@ -11,11 +12,27 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
         // es中节点地址，当是多节点时可以将node设置为数组
         node: config.get('ES_NODE'),
         auth: {
-          username: config.get('ELASTICSEARCH_USERNAME'),
-          password: config.get('ELASTICSEARCH_PASSWORD'),
+          username: config.get('ES_USER'),
+          password: config.get('ES_PASSWD'),
         },
+        maxRetries: 10,
+        // 请求超时时间：60s,用于业务请求的验证服务端是否在指定的时间内响应
+        requestTimeout: 60000,
+        // ping超时时间:用于维持长连接的活跃状态，心跳检测
+        pingTimeout: 60000,
+        // 启动时自动检测集群中的节点
+        sniffOnStart: true,
       }),
     }),
   ],
+  providers: [ProjectSearchService],
+  exports: [ProjectSearchService],
 })
-export class ProjectSearchModule {}
+
+/* 模块启动的时候需要执行初始化索引操作，所以需要实现OnModuleInit接口 */
+export class ProjectSearchModule implements OnModuleInit {
+  constructor(private searchService: ProjectSearchService) {}
+  onModuleInit() {
+    this.searchService.createIndex().then();
+  }
+}
