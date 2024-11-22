@@ -6,8 +6,8 @@ Todo:
   ☐ jwt验证通过后增加黑名单校验
   ✔ nestjs中使用MongoDB @done(24-11-19 18:02)
     ✔ 跑通MongoDB,用可视化工具看一下MongoDB中数据的存储方式 @started(24-11-19 09:50) @est(1.5h) @done(24-11-19 15:04) @lasted(5h14m11s)
-  ☐ nestjs中使用ElasticSearh @est(4h) @started(24-11-20 10:09)
-    ☐ es中创建索引，命名是怎么回事，.env文件中的文字需要修改吗
-  ☐ apifox中传参使用JSON schema如何表示由对象组成的数组
+  ✔ nestjs中使用ElasticSearh @est(4h) @started(24-11-20 10:09) @done(24-11-22 18:31) @lasted(2d8h22m54s)
+    ✔ es中创建索引，命名是怎么回事，.env文件中的文字需要修改吗 @done(24-11-22 18:30)
+  ✔ apifox中传参使用JSON schema如何表示由对象组成的数组 @done(24-11-22 18:32)
   ☐ 查询全部流程图项目做分页逻辑
   ☐ spec文件如何用于测试--次要任务

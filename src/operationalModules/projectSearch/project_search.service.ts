@@ -137,7 +137,7 @@ export class ProjectSearchService {
     const listFlowchart: IFlowchartJsonResponse[] = flowchartMockData;
     listFlowchart.forEach((item, index) => {
       body.push(
-        // todo:_index是什么用法
+        // _index:文档所属的索引，优先级高于bulk方法中指定的索引；_id：为每条数据指定唯一的id，如果不指定，es会自动生成
         { index: { _index: this.configService.get('ES_INDEX'), _id: index } },
         {
           title: item.title,
