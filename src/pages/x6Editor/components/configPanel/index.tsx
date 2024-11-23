@@ -1,5 +1,5 @@
 /*
- * @Author: Dongge
+ * @Author: yangsen
  * @Date: 2022-04-06 16:37:25
  * @LastEditTime: 2022-05-10 16:19:33
  * @Description: 属性展示模块demo，需要拓展成多种模块，后期可以优化，编辑器右侧

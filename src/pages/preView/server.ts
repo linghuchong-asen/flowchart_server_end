@@ -1,5 +1,5 @@
 /*
- * @Author: Dongge
+ * @Author: yangsen
  * @Date: 2022-04-22 16:21:42
  * @LastEditTime: 2022-04-22 16:54:30
  * @Description: 根据id获取要展示的内容
@@ -20,4 +20,3 @@ export const useGetEditordata = (params: { projectId?: string }) => {
     useNormalQueryOptions({ enabled: params.projectId !== undefined })
   );
 };
-

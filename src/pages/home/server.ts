@@ -1,5 +1,5 @@
 /*
- * @Author: Dongge
+ * @Author: yangsen
  * @Date: 2022-04-19 10:20:08
  * @LastEditTime: 2022-05-06 20:13:10
  * @Description: 后端api
@@ -12,7 +12,10 @@ import { useNormalQueryOptions } from "../../utils/hooks/useQueryOptions";
 import { http, onErrorTips } from "../../utils/http";
 
 export interface GetProjectQueryData {
-  data: { page: { pageSize: number; total: number }; tableData: tableDataProp[] };
+  data: {
+    page: { pageSize: number; total: number };
+    tableData: tableDataProp[];
+  };
 }
 
 /**
@@ -20,7 +23,10 @@ export interface GetProjectQueryData {
  *
  * 用法：const {isLoading,isSuccess,isError,data} = useGetProject(),具体见react-query官网
  */
-export const useGetProject = (params: { pageSize: number; pageNumber: number }) => {
+export const useGetProject = (params: {
+  pageSize: number;
+  pageNumber: number;
+}) => {
   return useQuery<GetProjectQueryData>(
     ["useGetProject", params],
     () => http("project/getAllProject", { params }),
@@ -93,7 +99,11 @@ export const useDeleteProject = () => {
   );
 };
 // 导入接口(本地JSON)
-export const useImportProject = (setLocalVisible: (param: boolean) => void, setFileList: (param: []) => void, form: FormInstance) => {
+export const useImportProject = (
+  setLocalVisible: (param: boolean) => void,
+  setFileList: (param: []) => void,
+  form: FormInstance
+) => {
   return useMutation(
     (params: any) =>
       http<[]>(`/editdata/importEditdata`, {
@@ -110,11 +120,11 @@ export const useImportProject = (setLocalVisible: (param: boolean) => void, setF
           });
         } else {
           // 隐藏对话框
-          setLocalVisible(false)
+          setLocalVisible(false);
           // 清空upload组件的fileList
-          setFileList([])
+          setFileList([]);
           // 清空form内容
-          form.setFieldsValue({ localJson: { file: null, fileList: null } })
+          form.setFieldsValue({ localJson: { file: null, fileList: null } });
           notification["success"]({
             message: "提示",
             description: "导入成功！",

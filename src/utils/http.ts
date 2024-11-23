@@ -1,5 +1,5 @@
 /*
- * @Author: Dongge
+ * @Author: yangsen
  * @Date: 2021-11-04 14:51:57
  * @LastEditTime: 2022-05-01 09:08:58
  * @Description: file content
@@ -9,7 +9,10 @@ import axios, { AxiosRequestConfig } from "axios";
 export interface normalResults {
   message: string;
 }
-export const http = async <T>(url: string, { params, ...props }: AxiosRequestConfig = {}) => {
+export const http = async <T>(
+  url: string,
+  { params, ...props }: AxiosRequestConfig = {}
+) => {
   const config: AxiosRequestConfig = {
     baseURL: "/api",
     method: "get",
@@ -51,4 +54,3 @@ export const onErrorTips = (error: { message: string }) => {
     description: error.message,
   });
 };
-

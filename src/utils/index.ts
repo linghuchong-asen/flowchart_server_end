@@ -1,5 +1,5 @@
 /*
- * @Author: Dongge
+ * @Author: yangsen
  * @Date: 2021-10-21 13:42:02
  * @LastEditTime: 2022-04-20 13:38:08
  * @Description: file content
@@ -28,7 +28,9 @@ export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
 
 const isVoid = (value: unknown) => value === undefined || value === null;
 
-export const cleanDataVoid = <T extends { [key in string]: unknown }>(object: T) => {
+export const cleanDataVoid = <T extends { [key in string]: unknown }>(
+  object: T
+) => {
   const result = { ...object };
   Object.keys(result).forEach((item) => {
     const value = result[item];
