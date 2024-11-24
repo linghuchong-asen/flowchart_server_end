@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2021-05-28 10:53:29
- * @LastEditTime: 2021-11-04 13:31:46
+ * @LastEditTime: 2024-11-23 16:30:11
  * @Description: file content
  */
 import React from "react";
@@ -14,7 +14,7 @@ export class ErrorBoundary extends React.Component<
   React.PropsWithChildren<{ fallbackRender: FallbackRender }>,
   { error: Error | null }
 > {
-  state = { error: null };
+  public state = { error: null };
   // 当子组件抛出异常，这里会接收到并且调用
   static getDerivedStateFromError(error: Error) {
     return { error };

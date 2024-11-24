@@ -1,8 +1,8 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-19 10:20:08
- * @LastEditTime: 2022-05-06 20:13:10
- * @Description: 后端api
+ * @LastEditTime: 2024-11-23 17:47:11
+ * @Description: 项目管理模块，后端api
  */
 
 import { FormInstance, notification } from "antd";
@@ -23,6 +23,8 @@ export interface GetProjectQueryData {
  *
  * 用法：const {isLoading,isSuccess,isError,data} = useGetProject(),具体见react-query官网
  */
+
+// TODO:使用react-query有什么好处
 export const useGetProject = (params: {
   pageSize: number;
   pageNumber: number;
@@ -34,6 +36,7 @@ export const useGetProject = (params: {
   );
 };
 
+// todo：返回一个url是什么意思，是MongoDB上的存储地址吗?为什么不是直接返回数据
 interface useGetDownloadprop {
   data: { url: string };
 }
@@ -68,9 +71,9 @@ export const useAddProject = () => {
           });
         }
 
-        // // // 刷新需要更新的query
+        // 刷新需要更新的query
         queryClient.invalidateQueries("useGetProject");
-        // // queryClient.invalidateQueries("useLLJobData");
+        // queryClient.invalidateQueries("useLLJobData");
       },
       onError: onErrorTips,
     }

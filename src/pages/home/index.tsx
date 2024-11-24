@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-13 10:00:33
- * @LastEditTime: 2022-05-18 10:12:47
+ * @LastEditTime: 2024-11-23 19:14:26
  * @Description: file content
  */
 
@@ -43,9 +43,11 @@ export const HomePage = () => {
 
   useEffect(() => {
     if (DownloadUrl?.data.url) {
+      // todo：这里url是reat router的地址，还是后端返回的一个完整的http网址
       window.open(DownloadUrl.data.url, "_self");
     }
   }, [DownloadUrl?.data.url]);
+  
 
   let tableSource: GetProjectQueryData["data"] = {
     page: { total: 0, pageSize: 1 },

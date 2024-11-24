@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-06 11:31:01
- * @LastEditTime: 2024-11-23 16:22:55
+ * @LastEditTime: 2024-11-24 21:33:53
  * @Description: file content
  */
 import { defineConfig } from "vite";
@@ -30,8 +30,9 @@ export default defineConfig({
     open: true,
     proxy: {
       "/api": {
-        target: "http://10.1.218.202:3000",
+        target: "http://127.0.0.1:4523/m1/5334797-5005559-default",
         changeOrigin: true,
+        // note: 现在rewrite规则，是将/api替换为空，所以后端接收到的请求路径是没有/api的
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
