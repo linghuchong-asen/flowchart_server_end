@@ -22,7 +22,8 @@ export class ProjectSearchService {
 
   async createIndex() {
     const checkIndex = await this.esService.indices.exists({
-      index: this.configService.get('ES_INDEX'),
+      // note:es中索引不支持驼峰命名
+      index: this.configService.get('ES_INDEX', 'project_index'),
     });
     if (!checkIndex) {
       try {

@@ -41,7 +41,7 @@ import { createClient, RedisModules } from 'redis';
           database: 0, // 选择数据库
           // ttl: 1000 * 60 * 60 * 4, // Time To Live 缓存数据的生存时间，使用createClient方法创建客户端时不支持设置，可以在set方法添加数据时设置
         })
-          .on('error', (err) => console.log('Redis Client Error', err))
+          .on('error', (err) => console.error('Redis Client Error', err))
           .connect();
         return client;
       },

@@ -8,29 +8,23 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { PostRo, PostsService } from './project_manager.service';
-import { CreatePostDto } from './dto/create_project.dto';
+import { PostRo, ProjectService } from './project_manager.service';
+import { CreateProjectDto } from './dto/create_project.dto';
+import { ProjectEntity } from './project_manager.entity';
 
 @Controller('posts') // 路径为/posts
-export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+export class ProjectController {
+  constructor(private readonly postsService: ProjectService) {}
 
-  /** 创建文章
-   * @param post
-   */
+  /** 新建项目 */
   /* @Body() 它的主要作用是从 HTTP 请求的请求体（Request Body）中提取数据，并将其传递给控制器方法中的参数。*/
   @Post()
-  async create(@Body() post: CreatePostDto) {
-    console.log(
-      'Received cover_url:',
-      post.cover_url,
-      post.title,
-      post.category,
-      typeof post.cover_url,
-      typeof post,
-      typeof post.category,
-    );
-    return this.postsService.create(post);
+  async create(@Body() project: CreateProjectDto) {
+    const projectEntity: ProjectEntity = {
+      project_name: project.projectName,
+      project_desc: project.projectDesc,
+    };
+    return this.postsService.create(projectEntity);
   }
 
   /** 获取所有文章 */

@@ -8,7 +8,7 @@ export interface PostRo {
   count: number;
 }
 @Injectable()
-export class PostsService {
+export class ProjectService {
   constructor(
     @InjectRepository(ProjectEntity)
     private readonly postsRepository: Repository<ProjectEntity>,
@@ -50,15 +50,15 @@ export class PostsService {
   }
 
   /** 获取指定文章 */
-  async findById(id): Promise<PostsEntity> {
+  async findById(id): Promise<ProjectEntity> {
     return await this.postsRepository.findOne({
-      select: ['id', 'title', 'content'], // 指定返回那几列
+      select: ['id', 'project_name', 'project_desc'], // 指定返回那几列
       where: { id }, // 查询id符合条件的行
     });
   }
 
   /** 更新文章 */
-  async updateById(id, post): Promise<PostsEntity> {
+  async updateById(id, post): Promise<ProjectEntity> {
     const existPost = await this.postsRepository.findOne({ where: { id } });
     if (!existPost) {
       throw new HttpException(`id为${id}的文章不存在`, 401);

@@ -3,7 +3,7 @@
  * @Author: yangsen
  * @Date: 2022-04-03 22:27:54
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-25 18:32:02
+ * @LastEditTime: 2024-11-25 22:12:16
  */
 
 import {
@@ -16,14 +16,14 @@ import {
 @Entity() // 没有指定表名，则表名默认为类名project_entity
 export class ProjectEntity {
   @PrimaryGeneratedColumn()
-  id: number; // 标记为主键，值自动生成
+  id?: number; // 标记为主键，值自动生成
   @Column({ length: 50 })
   project_name: string;
   @Column('text')
   project_desc: string;
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  create_date: Date;
+  create_date?: Date;
   /* 使用@UpdateDateColumn装饰器会自动更新时间戳 */
   @UpdateDateColumn({ type: 'timestamp' })
-  update_date: Date;
+  update_date?: Date;
 }
