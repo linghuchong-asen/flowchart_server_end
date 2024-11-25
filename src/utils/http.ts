@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2021-11-04 14:51:57
- * @LastEditTime: 2024-11-24 22:33:10
+ * @LastEditTime: 2024-11-25 16:25:24
  * @Description: file content
  */
 import { notification } from "antd";
@@ -42,13 +42,7 @@ export const http = async <T>(
     return { data, message };
   } else {
     const p = params ? { url, params } : { url };
-    const dataT = await doHttp(p)
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const dataT = await doHttp(p);
     const { data, message }: { data: T; message: string } = dataT as any;
     return { data, message };
   }
