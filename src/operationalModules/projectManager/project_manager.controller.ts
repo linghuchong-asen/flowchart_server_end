@@ -8,8 +8,8 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { PostRo, PostsService } from './posts.service';
-import { CreatePostDto } from './dto/create_post.dto';
+import { PostRo, PostsService } from './project_manager.service';
+import { CreatePostDto } from './dto/create_project.dto';
 
 @Controller('posts') // 路径为/posts
 export class PostsController {

@@ -1,36 +1,37 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PostsEntity } from './posts.entity';
+import { ProjectEntity } from './project_manager.entity';
 import { Repository } from 'typeorm';
 
 export interface PostRo {
-  list: PostsEntity[];
+  list: ProjectEntity[];
   count: number;
 }
 @Injectable()
 export class PostsService {
   constructor(
-    @InjectRepository(PostsEntity)
-    private readonly postsRepository: Repository<PostsEntity>,
+    @InjectRepository(ProjectEntity)
+    private readonly postsRepository: Repository<ProjectEntity>,
   ) {}
 
-  /* 创建文章 */
-  async create(post: Partial<PostsEntity>): Promise<PostsEntity> {
-    const { title } = post;
-    if (!title) {
-      throw new HttpException('文章标题不能为空', 400);
+  /* 新建项目 */
+  async create(project: Partial<ProjectEntity>): Promise<ProjectEntity> {
+    // todo: 当没有穿project_desc字段时，mysql中会存储为什么
+    const { project_name } = project;
+    if (!project_name) {
+      throw new HttpException('项目名称不能为空', 400);
     }
     const doc = await this.postsRepository.findOne({
-      where: { title },
+      where: { project_name },
     });
     if (doc) {
-      throw new HttpException('文章标题已存在', 409);
+      throw new HttpException('项目名称已存在', 409);
     }
 
-    return await this.postsRepository.save(post);
+    return await this.postsRepository.save(project);
   }
 
-  /**  获取文章列表 */
+  /**  获取项目列表 */
   async findAll(query): Promise<PostRo> {
     const qb = this.postsRepository.createQueryBuilder('post');
     qb.where('1=1');
