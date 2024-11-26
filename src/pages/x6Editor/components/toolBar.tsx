@@ -4,7 +4,7 @@
  * @Author: yangsen
  * @Date: 2022-04-14 15:36:12
  * @LastEditors: yangsen
- * @LastEditTime: 2022-05-18 14:47:35
+ * @LastEditTime: 2024-11-26 14:41:38
  */
 import { useEffect, useRef, useState } from "react";
 import { Menu, Toolbar } from "@antv/x6-react-components";
@@ -21,7 +21,6 @@ import {
 } from "@ant-design/icons";
 import "@antv/x6-react-components/es/toolbar/style/index.css";
 import "@antv/x6-react-components/es/menu/style/index.css";
-import "antd/dist/antd.css";
 import _, { after } from "underscore";
 import { Button, Modal } from 'antd';
 import { useSaveProject, GetEditordata } from "../server";

@@ -43,8 +43,9 @@ export const http = async <T>(
   } else {
     const p = params ? { url, params } : { url };
     const dataT = await doHttp(p);
-    const { data, message }: { data: T; message: string } = dataT as any;
-    return { data, message };
+    const { data, code, message }: { data: T; code: number; message: string } =
+      dataT as any;
+    return { data, code, message };
   }
 };
 

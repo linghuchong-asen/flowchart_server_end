@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-19 10:20:08
- * @LastEditTime: 2024-11-23 17:47:11
+ * @LastEditTime: 2024-11-26 16:08:03
  * @Description: 项目管理模块，后端api
  */
 
@@ -60,7 +60,7 @@ export const useAddProject = () => {
       onSuccess: (response) => {
         const { data, message } = response;
         if (data.length === 0) {
-          notification["success"]({
+          notification["error"]({
             message: "error",
             description: message,
           });
