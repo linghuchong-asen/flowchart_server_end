@@ -10,8 +10,9 @@ import { HomePage } from "../home";
 import { ImportOutSystem } from "../imoprtOutsystem";
 import { PreViewPage } from "../preView";
 import { X6Page } from "../x6Editor";
-import Login from "../login";
+import Login from "../login/login";
 import { PrivateRoute } from "./private_router";
+import Register from "../login/register";
 
 
 export const RouterPage = () => {
@@ -25,8 +26,9 @@ export const RouterPage = () => {
         <Route path="/preview/:projectid" element={<PreViewPage />} />
       </Routes> */}
       <Routes>
-        <Route path="/" element={< PrivateRoute component={HomePage} />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path="/" element={< PrivateRoute component={HomePage} />} />
         <Route path="/outsys/*" element={<PrivateRoute component={ImportOutSystem} />} />
         <Route path="/editor/:projectid/:projectName" element={<PrivateRoute component={X6Page} />} />
         <Route path="/preview/:projectid" element={<PrivateRoute component={PreViewPage} />} />

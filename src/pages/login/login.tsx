@@ -1,9 +1,9 @@
 /*
- * @Description: 登录注册页面
+ * @Description: 登录页面
  * @Author: yangsen
  * @Date: 2024-11-26 09:53:12
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-26 18:44:40
+ * @LastEditTime: 2024-11-27 18:45:46
  */
 import React from "react";
 import { Form, Input, Button } from "antd";
@@ -13,7 +13,7 @@ import { useLogin } from "./server";
 
 const Login = () => {
 
-  // const { mutateAsync: login } = useLogin()
+  const { mutateAsync: login } = useLogin()
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
     login(values)
@@ -44,17 +44,15 @@ const Login = () => {
           name="password"
           rules={[{ required: true, message: "Please input your Password!" }]}
         >
-          <Input
-            prefix={<LockOutlined />}
-            type="password"
-            placeholder="Password"
-          />
+          <Input.Password prefix={<LockOutlined />} placeholder="Password" />
         </Form.Item>
         <Form.Item>
           <Button block type="primary" htmlType="submit">
-            登录/注册
+            登录
           </Button>
+          or <a href="/register">去注册!</a>
         </Form.Item>
+
       </Form>
     </div>
   );

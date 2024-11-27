@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2021-11-04 14:51:57
- * @LastEditTime: 2024-11-25 16:25:24
+ * @LastEditTime: 2024-11-27 18:25:03
  * @Description: file content
  */
 import { notification } from "antd";
@@ -24,9 +24,9 @@ export const http = async <T>(
   doHttp.interceptors.response.use(
     (response: { data: { code?: any; data?: any; message?: any } }) => {
       // 拦截响应，做统一处理
-      if (response.data.code === 1) {
-        const { data, message } = response.data;
-        return { data, message };
+      if (response.data.code === 0) {
+        const { data, code, message } = response.data;
+        return { data, code, message };
       } else {
         return Promise.reject(response.data);
       }
@@ -38,8 +38,9 @@ export const http = async <T>(
   );
   if (config.method !== "get" && config.method !== "delete") {
     const dataT = await doHttp({ url, data: params });
-    const { data, message }: { data: T; message: string } = dataT as any;
-    return { data, message };
+    const { data, code, message }: { data: T; code: number; message: string } =
+      dataT as any;
+    return { data, code, message };
   } else {
     const p = params ? { url, params } : { url };
     const dataT = await doHttp(p);
