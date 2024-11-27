@@ -22,8 +22,8 @@ export class TransformInterceptor implements NestInterceptor {
     context.switchToHttp().getResponse();
     return next.handle().pipe(
       map((data) => ({
+        code: 0,
         data,
-        code: 1,
         message: '请求成功',
       })),
     );

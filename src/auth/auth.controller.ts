@@ -28,7 +28,7 @@ export class AuthController {
   @UseGuards(AuthGuard('local')) //UseGuards装饰器可以传入多个认证守卫，在接收到对应请求时，会依次调用认证守卫
   @UseInterceptors(ClassSerializerInterceptor)
   async login(@Body() loginInfo: LoginDto, @Req() req) {
-    // 逻辑能走到这里，证明用户登录认证已经通过
+    // 逻辑能走到这里，证明用户登录认证已经通过;验证用户名密码的逻辑是在passport这个库的local策略中执行的
     const existUser = await this.userRepository.findOne({
       where: { username: loginInfo.username },
     });

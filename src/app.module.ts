@@ -9,10 +9,10 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
-import { RedisCacheModule } from './jwtRedis/redis_cache.module';
+// import { RedisCacheModule } from './jwtRedis/redis_cache.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EditorDocumentModule } from './operationalModules/editorDocument/editor_document.module';
-import { ProjectSearchModule } from './operationalModules/projectSearch/project_search.module';
+// import { ProjectSearchModule } from './operationalModules/projectSearch/project_search.module';
 
 /* nest项目可以理解为由好多模块组成的，app.module.ts是项目的根模块 */
 @Module({
@@ -32,8 +32,8 @@ import { ProjectSearchModule } from './operationalModules/projectSearch/project_
         host: configService.get('DB_HOST', 'localhost'), // 后面的localhost是当前没有配置环境变量时，默认值
         port: configService.get<number>('DB_PORT', 3306),
         username: configService.get('DB_USER', 'root'),
-        password: configService.get('DB_PASSWD', 'word123'),
-        database: configService.get('DB_DATABASE', 'blog'),
+        password: configService.get('DB_PASSWD', '123456'),
+        database: configService.get('DB_DATABASE', 'flowchart_editor'),
         timezone: '+08:00', // 服务器上配置的时区
         synchronize: true, // 根据实体自动创建数据库表，生产环境建议关闭
       }),
@@ -63,9 +63,9 @@ import { ProjectSearchModule } from './operationalModules/projectSearch/project_
     PostsModule,
     UserModule,
     AuthModule,
-    RedisCacheModule,
+    // RedisCacheModule,
     EditorDocumentModule,
-    ProjectSearchModule,
+    // ProjectSearchModule,
   ],
   controllers: [AppController], // 处理http请求，包括路由控制，向客户端返回响应
   providers: [AppService], // 服务提供者，处理具体的业务逻辑

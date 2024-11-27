@@ -3,11 +3,12 @@
  * @Author: yangsen
  * @Date: 2024-11-11 10:30:10
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-13 14:45:08
+ * @LastEditTime: 2024-11-27 18:40:39
  */
 import {
   BeforeInsert,
   Column,
+  CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -30,7 +31,7 @@ export class UserEntity {
   @Column({ length: 100 })
   username: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, default: '' })
   nickname: string;
 
   @Column()
@@ -40,7 +41,7 @@ export class UserEntity {
   @Column({ default: path.resolve(__dirname, '../../public/avatar.jpg') })
   avatar: string;
 
-  @Column()
+  @Column({ default: '' })
   email: string;
 
   @Column({
@@ -50,10 +51,10 @@ export class UserEntity {
   })
   role: string; // 用户角色
 
-  @Column({
+  @CreateDateColumn({
     name: 'create_time', // 存入数据库的实际是create_time
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
+    // default: () => 'CURRENT_TIMESTAMP',
   })
   createTime: Date;
 
@@ -64,7 +65,7 @@ export class UserEntity {
   updateTime: Date;
 
   @BeforeInsert()
-  async encryptPassword() {
+  async encryptPassword(): Promise<void> {
     // 插入数据库之前执行的方法
     this.password = await bcrypt.hashSync(this.password, 10);
   }

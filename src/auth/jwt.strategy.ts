@@ -1,4 +1,4 @@
-import { RedisCacheService } from '../jwtRedis/redis_cache.service';
+// import { RedisCacheService } from '../jwtRedis/redis_cache.service';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -27,8 +27,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     private readonly ConfigService: ConfigService,
     private readonly authService: AuthService,
     private readonly userService: UserService,
-    private readonly redisCacheService: RedisCacheService,
-  ) {
+  ) // private readonly redisCacheService: RedisCacheService,
+  {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: ConfigService.get('JWT_SECRET', 'secret123456'),
@@ -45,12 +45,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       throw new UnauthorizedException('token不正确');
     }
 
-    const isBlacklisted = await this.redisCacheService.isUserInBlacklist(
-      userId,
-    );
-    if (isBlacklisted) {
-      throw new UnauthorizedException('黑名单用户');
-    }
+    // const isBlacklisted = await this.redisCacheService.isUserInBlacklist(
+    //   userId,
+    // );
+    // if (isBlacklisted) {
+    //   throw new UnauthorizedException('黑名单用户');
+    // }
 
     // NOTE: validate返回值会被添加到请求对象的req.user属性上，这样你可以在后续的处理器（如控制器方法）中访问到这个用户信息。
     return existUser;

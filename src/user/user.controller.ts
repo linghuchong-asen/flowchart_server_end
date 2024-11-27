@@ -12,8 +12,8 @@ import {
   Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from './dto/create_user.dto';
+import { UpdateUserDto } from './dto/update_user.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/auth.guard';

@@ -26,9 +26,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
       ? exception.message
       : `${status >= 500 ? 'Server Error' : 'Client Error'}`;
     const errorResponse = {
+      code: -1,
       data: {},
       message: validateMessage || message,
-      code: -1,
       request: `${ctx.getRequest().method} ${ctx.getRequest().url}`,
     };
 

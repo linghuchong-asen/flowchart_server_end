@@ -9,8 +9,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { UserService } from 'src/user/user.service';
-import { RedisCacheService } from 'src/jwtRedis/redis_cache.service';
-import { RedisCacheModule } from 'src/jwtRedis/redis_cache.module';
+// import { RedisCacheService } from 'src/jwtRedis/redis_cache.service';
+// import { RedisCacheModule } from 'src/jwtRedis/redis_cache.module';
 
 const jwtModule = JwtModule.registerAsync({
   inject: [ConfigService],
@@ -28,7 +28,7 @@ const jwtModule = JwtModule.registerAsync({
     TypeOrmModule.forFeature([UserEntity]),
     PassportModule,
     jwtModule,
-    RedisCacheModule,
+    // RedisCacheModule,
   ],
   controllers: [AuthController],
   // 服务提供者，不是模块这个级别，是具体的服务
