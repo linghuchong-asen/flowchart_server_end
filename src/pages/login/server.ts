@@ -8,7 +8,7 @@ interface ILoginParams {
   password: string;
 }
 
-export const useLogin = () => {
+export const useLogin = (fromPath: string) => {
   const navigate = useNavigate();
   return useMutation(
     (params: ILoginParams) => http(`/auth/login`, { method: "post", params }),
@@ -20,8 +20,10 @@ export const useLogin = () => {
             message: "提示",
             description: "登录成功！",
           });
+          // 将token保存到localstorage中
+          localStorage.setItem("Authorization", data as string);
           // 重定向到首页
-          navigate("/");
+          navigate(fromPath);
         } else {
           notification["error"]({
             message: "发生错误",
@@ -50,7 +52,7 @@ export const useRegister = () => {
         if (code === 0) {
           notification["success"]({
             message: "提示",
-            description: "添加成功！",
+            description: "注册成功！",
           });
           // 重定向到登录页
           navigate("/login");

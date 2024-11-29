@@ -3,7 +3,7 @@
  * @Author: yangsen
  * @Date: 2024-11-26 09:53:12
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-27 18:42:15
+ * @LastEditTime: 2024-11-28 10:55:56
  */
 import React from "react";
 import { Form, Input, Button } from "antd";
@@ -50,7 +50,7 @@ const Register = () => {
           <Button block type="primary" htmlType="submit">
             注册
           </Button>
-          or <a href="/register">去登录!</a>
+          or <a href="/login">去登录!</a>
         </Form.Item>
       </Form>
     </div>

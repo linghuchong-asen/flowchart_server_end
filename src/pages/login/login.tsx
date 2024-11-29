@@ -3,20 +3,22 @@
  * @Author: yangsen
  * @Date: 2024-11-26 09:53:12
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-27 18:45:46
+ * @LastEditTime: 2024-11-28 15:04:48
  */
-import React from "react";
+
 import { Form, Input, Button } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { useState } from "react";
 import { useLogin } from "./server";
+import { useLocation } from "react-router-dom";
 
 const Login = () => {
 
-  const { mutateAsync: login } = useLogin()
+  const location = useLocation();
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
+  const { mutateAsync: loginRequest } = useLogin(from);
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
-    login(values)
+    loginRequest(values)
   };
 
   return (

@@ -1,8 +1,8 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-06 12:22:01
- * @LastEditTime: 2022-05-16 17:56:30
- * @Description: file content
+ * @LastEditTime: 2024-11-28 15:31:41
+ * @Description: 编辑器index
  */
 
 import { Cell, Graph } from "@antv/x6";

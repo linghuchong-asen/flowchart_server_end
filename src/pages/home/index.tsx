@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-13 10:00:33
- * @LastEditTime: 2024-11-23 19:14:26
+ * @LastEditTime: 2024-11-28 15:13:03
  * @Description: file content
  */
 
@@ -37,7 +37,7 @@ export const HomePage = () => {
   const [localVisible, setLocalVisible] = useState<boolean>(false)
   const [importId, setImportId] = useState<string>()
   const [fileList, setFileList] = useState<UploadFile<unknown>[]>([]);
-  const { data, isSuccess, isFetching } = useGetProject(params);
+  const { data: projectListResponse, isSuccess, isFetching } = useGetProject(params);
   const { data: DownloadUrl } = useGetDownload({ projectId: nowid });
   const { confirm } = Modal;
 
@@ -47,7 +47,7 @@ export const HomePage = () => {
       window.open(DownloadUrl.data.url, "_self");
     }
   }, [DownloadUrl?.data.url]);
-  
+
 
   let tableSource: GetProjectQueryData["data"] = {
     page: { total: 0, pageSize: 1 },
@@ -55,7 +55,7 @@ export const HomePage = () => {
   };
 
   if (isSuccess) {
-    const { page, tableData } = data.data;
+    const { page, tableData } = projectListResponse.data;
     tableSource = { ...tableSource, page, tableData };
   }
 
