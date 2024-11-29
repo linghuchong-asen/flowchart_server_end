@@ -1,6 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
 import { IsFieldNotProvided } from './update_user_decorate.util';
-import { Expose, Transform } from 'class-transformer';
 
 export class CreateUserDto {
   @IsNotEmpty({ message: '用户名不能为空' })

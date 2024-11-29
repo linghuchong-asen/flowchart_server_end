@@ -1,3 +1,10 @@
+/*
+ * @Description: 验证jwt
+ * @Author: yangsen
+ * @Date: 2024-11-27 10:29:42
+ * @LastEditors: yangsen
+ * @LastEditTime: 2024-11-29 10:33:43
+ */
 // import { RedisCacheService } from '../jwtRedis/redis_cache.service';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
@@ -26,9 +33,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     private readonly userRepository: Repository<UserEntity>,
     private readonly ConfigService: ConfigService,
     private readonly authService: AuthService,
-    private readonly userService: UserService,
-  ) // private readonly redisCacheService: RedisCacheService,
-  {
+    private readonly userService: UserService, // private readonly redisCacheService: RedisCacheService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: ConfigService.get('JWT_SECRET', 'secret123456'),

@@ -3,7 +3,7 @@
  * @Author: yangsen
  * @Date: 2022-04-03 22:27:54
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-25 22:12:16
+ * @LastEditTime: 2024-11-29 16:47:33
  */
 
 import {
@@ -13,10 +13,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity() // 没有指定表名，则表名默认为类名project_entity
+@Entity('project') // 没有指定表名，则表名默认为类名project_entity
 export class ProjectEntity {
-  @PrimaryGeneratedColumn()
-  id?: number; // 标记为主键，值自动生成
+  @PrimaryGeneratedColumn('uuid')
+  id?: string; // 标记为主键，值自动生成
   @Column({ length: 50 })
   project_name: string;
   @Column('text')
