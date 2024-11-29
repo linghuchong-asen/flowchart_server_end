@@ -39,7 +39,7 @@ export class AuthController {
       id: existUser.id,
       ...loginInfo,
     });
-    return token;
+    return `Bearer ${token}`;
   }
 
   // 通过前端删除token的方式退出登录

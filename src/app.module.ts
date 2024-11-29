@@ -49,7 +49,7 @@ import { EditorDocumentModule } from './operationalModules/editorDocument/editor
           'devUser',
         )}:${config.get('MONGO_DB_PASSWD', '123456')}@${config.get(
           'MONGO_DB_HOST',
-          'localhost',
+          '127.0.0.1',
         )}:${config.get('MONGO_DB_PORT', 27017)}/${config.get(
           'MONGO_DB_NAME',
           'flowchartEditor',

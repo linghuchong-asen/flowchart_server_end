@@ -1,0 +1,13 @@
+{
+  "jsc": {
+    "target": "esnext",
+    "transform": {
+      "module": {
+        "type": "commonjs"
+      }
+    }
+  },
+  "module": {
+    "paths": ["src", "config"]
+  }
+}

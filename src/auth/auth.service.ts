@@ -16,6 +16,6 @@ export class AuthService {
       id: user.id,
       username: user.username,
     });
-    return { token };
+    return token;
   }
 }
