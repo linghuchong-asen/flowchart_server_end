@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-19 10:20:08
- * @LastEditTime: 2024-11-26 16:08:03
+ * @LastEditTime: 2024-11-29 16:41:57
  * @Description: 项目管理模块，后端api
  */
 
@@ -31,7 +31,7 @@ export const useGetProject = (params: {
 }) => {
   return useQuery<GetProjectQueryData>(
     ["useGetProject", params],
-    () => http("project/getAllProject", { params }),
+    () => http("/project", { params }),
     useNormalQueryOptions()
   );
 };
@@ -52,7 +52,7 @@ export const useAddProject = () => {
   const queryClient = useQueryClient();
   return useMutation(
     (params: { projectName: string; projectDesc: string }) =>
-      http<[]>(`/project/createProject`, {
+      http<[]>(`/project`, {
         method: "post",
         params,
       }),

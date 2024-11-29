@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-13 10:00:33
- * @LastEditTime: 2024-11-28 15:13:03
+ * @LastEditTime: 2024-11-29 14:12:14
  * @Description: file content
  */
 
@@ -40,6 +40,7 @@ export const HomePage = () => {
   const { data: projectListResponse, isSuccess, isFetching } = useGetProject(params);
   const { data: DownloadUrl } = useGetDownload({ projectId: nowid });
   const { confirm } = Modal;
+
 
   useEffect(() => {
     if (DownloadUrl?.data.url) {

@@ -6,13 +6,13 @@
  */
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { HomePage } from "../home";
-import { ImportOutSystem } from "../imoprtOutsystem";
-import { PreViewPage } from "../preView";
-import { X6Page } from "../x6Editor";
-import Login from "../login/login";
+import { HomePage } from "../pages/home";
+import { ImportOutSystem } from "../pages/imoprtOutsystem";
+import { PreViewPage } from "../pages/preView";
+import { X6Page } from "../pages/x6Editor";
+import Login from "../pages/login/login";
 import { PrivateRoute } from "./private_router";
-import Register from "../login/register";
+import Register from "../pages/login/register";
 
 
 export const RouterPage = () => {

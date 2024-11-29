@@ -4,7 +4,7 @@
  * @Author: yangsen
  * @Date: 2022-04-14 15:36:12
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-26 14:41:38
+ * @LastEditTime: 2024-11-29 16:25:26
  */
 import { useEffect, useRef, useState } from "react";
 import { Menu, Toolbar } from "@antv/x6-react-components";
@@ -125,7 +125,6 @@ const ToolBar = (props: props) => {
   })
   // 绑定快捷键--复制
   graph.bindKey('ctrl+c', () => {
-    console.log('复制');
     const cells_copy = graph.getSelectedCells()
     if (cells_copy.length) {
       graph.copy(cells_copy)
@@ -134,7 +133,6 @@ const ToolBar = (props: props) => {
   })
   // 绑定快捷键--粘贴
   graph.bindKey('ctrl+v', () => {
-    console.log('粘贴');
     if (!graph.isClipboardEmpty()) {
       const cells_paste = graph.paste({ offset: 32 })
       // 修改ID为8位数
@@ -264,7 +262,6 @@ const ToolBar = (props: props) => {
             return _.isEqual(item, result[index]) === false
           })
         } else {
-          console.log(23);
           isSave = false
         }
         isSave = _.isEqual(result, localResult)

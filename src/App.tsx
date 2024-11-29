@@ -9,7 +9,7 @@ import "./App.css";
 import "antd/dist/antd.less";
 import { ErrorBoundary } from "./components/error-boundary";
 import { FullpageErrorFallback } from "./components/lib";
-import { RouterPage } from "./pages/router/routes";
+import { RouterPage } from "./router/routes";
 function App() {
   return (
     <ErrorBoundary fallbackRender={FullpageErrorFallback}>
