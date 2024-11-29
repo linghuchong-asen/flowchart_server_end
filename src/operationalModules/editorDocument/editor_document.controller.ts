@@ -11,7 +11,7 @@ import { EditorDocumentService } from './editor_document.service';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { SaveEditorDocumentDto } from './dto/save_editor_document.dto';
 
-@Controller('editorDocument') // 参数为路径
+@Controller('editor') // 参数为路径
 export class EditorDocumentController {
   constructor(private readonly editorDocumentService: EditorDocumentService) {}
 
