@@ -2,7 +2,12 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProjectEntity } from './project_manager.entity';
 import { Repository } from 'typeorm';
-import { classToPlain, instanceToPlain, plainToClass } from 'class-transformer';
+import {
+  classToPlain,
+  instanceToPlain,
+  plainToClass,
+  plainToInstance,
+} from 'class-transformer';
 import { ProjectResponseDto } from './dto/project_response.dto';
 import { CreateProjectDto } from './dto/create_project.dto';
 
@@ -22,7 +27,7 @@ export class ProjectService {
   /* 新建项目 */
   async create(project: CreateProjectDto): Promise<ProjectResponseDto> {
     // todo: 当没有传project_desc字段时，mysql中会存储为什么
-    const { projectName: project_name } = project;
+    const { project_name } = project;
     if (!project_name) {
       throw new HttpException('项目名称不能为空', 400);
     }
@@ -32,14 +37,19 @@ export class ProjectService {
     if (doc) {
       throw new HttpException('项目名称已存在', 409);
     }
-    const projectEntity = plainToClass(ProjectEntity, project);
+    // const projectEntity = plainToInstance(ProjectEntity, project);
     // this.projectRepository.create(project);
 
-    const savedProject = await this.projectRepository.save(projectEntity);
+    const savedProject = await this.projectRepository.save(project);
     // TypeORM会将查询结果转换为类实例，所以savedProject是一个类实例对象，返回前端的通常是普通对象（使用{}字面量或Object.create()创建的对象，它们没有构造函数或类的方法）
-    return instanceToPlain(savedProject, {
-      excludeExtraneousValues: true,
-    });
+    const c = instanceToPlain(savedProject);
+    const a = instanceToPlain(savedProject);
+    const responseData = plainToInstance(ProjectResponseDto, a);
+    const d = instanceToPlain(responseData);
+    const b = plainToInstance(ProjectResponseDto, a);
+
+    // const result = instanceToPlain(a);
+    return responseData;
   }
 
   /**  获取项目列表 */

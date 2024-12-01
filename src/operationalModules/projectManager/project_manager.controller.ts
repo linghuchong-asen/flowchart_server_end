@@ -11,6 +11,7 @@ import {
 import { ProjectRo, ProjectService } from './project_manager.service';
 import { CreateProjectDto } from './dto/create_project.dto';
 import { ProjectEntity } from './project_manager.entity';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 
 @Controller('project') // 路径为/project
 export class ProjectController {
@@ -20,7 +21,11 @@ export class ProjectController {
   /* @Body() 它的主要作用是从 HTTP 请求的请求体（Request Body）中提取数据，并将其传递给控制器方法中的参数。*/
   @Post()
   async create(@Body() project: CreateProjectDto) {
-    return this.projectService.create(project);
+    /* note：在 controller 中接收到的参数不会完成@Expose 中重新定义的字段名，且接收到的参数还是普通对象，在使用 plainToInStance(), instanceToPlain()方法时会完成字段名名的转换； */
+    const projectDto = plainToInstance(CreateProjectDto, project);
+    // const a = instanceToPlain(projectDto);
+    // const b = plainToInstance(CreateProjectDto, project);
+    return this.projectService.create(projectDto);
   }
 
   /** 获取项目列表 */
