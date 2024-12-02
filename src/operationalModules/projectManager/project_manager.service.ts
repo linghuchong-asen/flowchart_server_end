@@ -7,7 +7,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProjectEntity } from './project_manager.entity';
+import { ProjectEntity } from './entities/project_manager.entity';
 import { Repository } from 'typeorm';
 import {
   classToPlain,
@@ -32,7 +32,6 @@ export class ProjectService {
   ) {}
 
   /* 新建项目 */
-  // @UseInterceptors(ClassSerializerInterceptor)
   async create(project: ProjectEntity): Promise<ProjectEntity> {
     // todo: 当没有传project_desc字段时，mysql中会存储为什么
     const { project_name } = project;
@@ -45,20 +44,10 @@ export class ProjectService {
     if (doc) {
       throw new HttpException('项目名称已存在', 409);
     }
-    // const projectEntity = plainToInstance(ProjectEntity, project);
-    // this.projectRepository.create(project);
 
     /* TypeORM会将查询结果转换为类实例，所以savedProject是一个类实例对象(此处为CreateProjectDto)，返回前端的通常是普通对象 */
     /* save方法返回的实例对象类型是与传入参数一致的，比如传入的的是CreateProjectDto返回的也是CreateProjectDto；传入的ProjectEntity返回的也是ProjectEntity */
     const savedProject = await this.projectRepository.save(project);
-
-    const c = instanceToPlain(savedProject);
-    const a = instanceToPlain(savedProject);
-    const responseData = plainToInstance(ProjectResponseDto, a);
-    const d = instanceToPlain(responseData);
-    const b = plainToInstance(ProjectResponseDto, a);
-
-    // const result = instanceToPlain(a);
     return savedProject;
   }
 
@@ -69,7 +58,7 @@ export class ProjectService {
   }): Promise<ProjectRo> {
     const qb = this.projectRepository.createQueryBuilder('project'); // 数据库表的名字
     qb.where('1=1'); // 1=1 总是为真，不会影响查询结果，但可以作为一个占位符，方便后续添加更多的条件。
-    qb.orderBy('project.update_date', 'DESC'); // DESC是降序的意思，升序：ASC
+    qb.orderBy('project.update_time', 'DESC'); // DESC是降序的意思，升序：ASC
 
     const count = await qb.getCount();
     const { pageNumber = 1, pageSize = 10 } = query;

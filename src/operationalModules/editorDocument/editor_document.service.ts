@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { EditorDocument } from './editor_document.schema';
+import { EditorDocument } from './schemas/editor_document.schema';
 import mongoose, { Model } from 'mongoose';
 
 const logger = new Logger('EditorDocumentService)');
@@ -16,23 +16,28 @@ export class EditorDocumentService {
 
   /** 保存编辑器文档 */
   async save(editorDocumentData: EditorDocument) {
-    const name = editorDocumentData.name;
+    const projectId = editorDocumentData.projectId;
     const existProject = await this.editorDocumentModel
-      .findOne({ name })
+      .findOne({ projectId })
       .exec();
     // 不存在时，existProject = null
     if (existProject) {
       // 更新文档
       return this.editorDocumentModel
-        .updateOne({ name }, editorDocumentData)
+        .updateOne({ projectId }, editorDocumentData)
         .exec()
         .catch((err) => {
           logger.error('更新文档失败', err);
         });
     } else {
       // 创建文档
-      const createDocument = new this.editorDocumentModel(editorDocumentData);
-      return createDocument.save();
+      try {
+        const createDocument = new this.editorDocumentModel(editorDocumentData);
+        const saveResult = await createDocument.save();
+        if (saveResult) return {};
+      } catch (err) {
+        logger.error('创建文档失败', err);
+      }
     }
   }
 
@@ -44,9 +49,8 @@ export class EditorDocumentService {
   /** 根据id获取编辑器文档 */
   async getDocumentById(id: string): Promise<EditorDocument> | null {
     try {
-      const objectId = new ObjectId(id); // 在 MongoDB 中，_id 字段通常是 ObjectId 类型
       const existProject = await this.editorDocumentModel
-        .findById(objectId)
+        .findOne({ projectId: id })
         .exec()
         .catch((err) => {
           logger.error('根据id获取编辑器文档', err);

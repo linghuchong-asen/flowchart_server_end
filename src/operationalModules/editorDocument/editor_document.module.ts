@@ -7,7 +7,10 @@
  */
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { EditorDocument, EditorDocumentSchema } from './editor_document.schema';
+import {
+  EditorDocument,
+  EditorDocumentSchema,
+} from './schemas/editor_document.schema';
 import { EditorDocumentController } from './editor_document.controller';
 import { EditorDocumentService } from './editor_document.service';
 
