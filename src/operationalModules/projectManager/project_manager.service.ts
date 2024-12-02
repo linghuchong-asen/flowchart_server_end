@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProjectEntity } from './entities/project_manager.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import {
   classToPlain,
   instanceToPlain,
@@ -29,6 +29,7 @@ export class ProjectService {
   constructor(
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
+    private readonly dataSource: DataSource,
   ) {}
 
   /* 新建项目 */
@@ -101,11 +102,25 @@ export class ProjectService {
   }
 
   /** 删除项目 */
-  async removeById(id): Promise<any> {
-    const existProject = await this.projectRepository.findOne(id);
-    if (!existProject) {
-      throw new HttpException(`id为${id}的项目不存在`, 401);
+  async removeById(ids: string[]): Promise<any> {
+    // dataSource默认使用typeORM链接的数据库
+    const queryRunner = this.dataSource.createQueryRunner();
+    try {
+      ids.forEach(async (id) => {
+        const existProject = await queryRunner.manager.findOne(ProjectEntity, {
+          where: [{ id }],
+        });
+        if (!existProject) {
+          throw new HttpException(`id为${id}的项目不存在`, 401);
+        }
+        return await this.projectRepository.delete(id);
+      });
+    } catch (err) {
+      logger.error('删除项目失败', err);
+      await queryRunner.rollbackTransaction();
+    } finally {
+      // 完成操作，释放queryRunner以避免资源泄露
+      await queryRunner.release();
     }
-    return await this.projectRepository.delete(id);
   }
 }

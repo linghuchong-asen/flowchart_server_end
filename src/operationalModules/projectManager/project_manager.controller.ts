@@ -53,7 +53,6 @@ export class ProjectController {
   /* :id是路径参数占位符，客户端发送一个 GET 请求到 /somepath/123 时，这个处理器会被触发，并且 id 参数会被解析为 123。 */
   /*  */
   @Get(':id')
-  /* 获取路由参数id,@Query是所有路由参数，@Param是获取指定路由参数 */
   async findById(@Param('id') id) {
     const projectResult = await this.projectService.findById(id);
     return projectResult;
@@ -62,7 +61,6 @@ export class ProjectController {
   /** 更新项目信息
    * @param id
    * @param post */
-  /*获取路由参数id,@Query是所有路由参数(get),@Param是获取指定路由参数@Body用于post或put、delete请求体参数*/
   @Put(':id')
   async update(@Param('id') id, @Body() post) {
     return await this.projectService.updateById(id, post);
@@ -71,8 +69,9 @@ export class ProjectController {
   /** 删除项目
    *  @param id
    */
-  @Delete(':id')
-  async remove(@Param('id') id) {
-    return await this.projectService.removeById(id);
+  @Delete('delProject')
+  async remove(@Query() reqParams) {
+    const { projectIds } = reqParams;
+    return await this.projectService.removeById(projectIds);
   }
 }
