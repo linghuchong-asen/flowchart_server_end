@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-22 16:21:42
- * @LastEditTime: 2022-04-22 16:54:30
+ * @LastEditTime: 2024-12-02 14:28:54
  * @Description: 根据id获取要展示的内容
  */
 
@@ -11,12 +11,12 @@ import { useNormalQueryOptions } from "../../utils/hooks/useQueryOptions";
 import { http } from "../../utils/http";
 
 interface editorDataProp {
-  data: { projectId: string; editData: fromjsonData[] };
+  data: { projectId: string; editorData: fromjsonData[] };
 }
-export const useGetEditordata = (params: { projectId?: string }) => {
+export const useGetEditorData = (params: { projectId: string }) => {
   return useQuery<editorDataProp>(
     ["useGetEditordata", params],
-    () => http("/editdata/getEditdataById", { params }),
+    () => http(`/editor/getEditorById/${params.projectId}`),
     useNormalQueryOptions({ enabled: params.projectId !== undefined })
   );
 };

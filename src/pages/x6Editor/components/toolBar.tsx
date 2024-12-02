@@ -4,7 +4,7 @@
  * @Author: yangsen
  * @Date: 2022-04-14 15:36:12
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-29 16:25:26
+ * @LastEditTime: 2024-12-02 16:50:38
  */
 import { useEffect, useRef, useState } from "react";
 import { Menu, Toolbar } from "@antv/x6-react-components";
@@ -23,11 +23,12 @@ import "@antv/x6-react-components/es/toolbar/style/index.css";
 import "@antv/x6-react-components/es/menu/style/index.css";
 import _, { after } from "underscore";
 import { Button, Modal } from 'antd';
-import { useSaveProject, GetEditordata } from "../server";
+import { useSaveEditorData } from "../server";
 import { fromjsonData } from "../../preView";
 import { Graph, Node } from "@antv/x6";
 import { getUid } from '../../imoprtOutsystem/outsystem/G6translate'
 import Icon from "../../../assets/icon/icon";
+import { useGetEditorData } from "../../preView/server";
 
 const Item = Toolbar.Item;
 const Group = Toolbar.Group;
@@ -93,27 +94,25 @@ const ToolBar = (props: props) => {
   const [visible, setVisible] = useState<boolean>(false)
   const [scale, setScale] = useState<string>('100%')
   const [nowScale, setNowScale] = useState<number>(1)
-  const { mutateAsync } = useSaveProject();
+  const { mutateAsync: saveEditorData } = useSaveEditorData();
   let result!: fromjsonData[];
   let localResult!: fromjsonData[];
   const graph = props.graph;
   let isSave!: boolean
 
   // 获取后端数据
-  const { data } = GetEditordata({ projectId: props.projectid });
+  const { data } = useGetEditorData({ projectId: props.projectid });
   console.log(data);
-  if (data) {
-    const { editData } = data.data;
-    result = editData;
-    console.log('');
-    // queryCache.invalidateQueries('useGetEditordata')
+  if (data?.data) {
+    const { editorData } = data.data;
+    result = editorData;
   }
   // 绑定快捷键--保存
   graph.bindKey('ctrl+s', () => {
-    mutateAsync({
+    saveEditorData({
       projectId: props.projectid,
-      editData: projectJson(),
-      notice: true
+      projectName: props.projectName,
+      editorData: projectJson(),
     });
     return false
   })
@@ -138,10 +137,10 @@ const ToolBar = (props: props) => {
       // 修改ID为8位数
       cells_paste[0].setProp("id", getUid(8));
       // 更新数据库数据，并刷新
-      mutateAsync({
+      saveEditorData({
         projectId: props.projectid,
-        editData: projectJson(),
-        notice: false,
+        projectName: props.projectName,
+        editorData: projectJson(),
       });
       console.log(cells_paste);
       graph.cleanSelection()
@@ -162,7 +161,6 @@ const ToolBar = (props: props) => {
   useEffect(() => {
     const graph = props.graph;
     const history = graph.history;
-    console.log(history);
     setCanUndo(history.canUndo());
     setCanRedo(history.canRedo());
     history.on("change", () => {
@@ -190,8 +188,6 @@ const ToolBar = (props: props) => {
       }
       return item;
     });
-
-    console.log(newX6Json);
     return newX6Json;
   };
   const handleClick = (name: string) => {
@@ -273,10 +269,10 @@ const ToolBar = (props: props) => {
 
         break;
       case "save":
-        mutateAsync({
+        saveEditorData({
           projectId: props.projectid,
-          editData: projectJson(),
-          notice: true
+          projectName: props.projectName,
+          editorData: projectJson(),
         });
         break;
       case 'minimap':
@@ -289,10 +285,10 @@ const ToolBar = (props: props) => {
   };
   // 确认保存弹出框的方法
   const save = () => {
-    const mutation = mutateAsync({
+    const mutation = saveEditorData({
       projectId: props.projectid,
-      editData: projectJson(),
-      notice: true
+      projectName: props.projectName,
+      editorData: projectJson(),
     })
     mutation.then((response) => {
       if (response.message === '保存成功') {

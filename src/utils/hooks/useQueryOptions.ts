@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2021-11-12 16:10:09
- * @LastEditTime: 2022-05-01 00:29:43
+ * @LastEditTime: 2024-12-02 13:31:16
  * @Description: file content
  */
 import { notification } from "antd";
@@ -11,11 +11,11 @@ export const useNormalQueryOptions = <T = any>(option?: UseQueryOptions<T>) => {
     refetchOnWindowFocus: false,
     onError: (error) => {
       console.log("query");
-      const err = error as { code: number; msg: string };
+      const err = error as { code: number; message: string };
       console.log(err);
       notification["error"]({
         message: "发生错误",
-        description: err.msg,
+        description: err.message,
       });
     },
     ...option,

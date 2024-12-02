@@ -1,11 +1,11 @@
 /*
  * @Author: yangsen
  * @Date: 2021-11-04 14:51:57
- * @LastEditTime: 2024-11-27 18:25:03
+ * @LastEditTime: 2024-12-02 14:46:46
  * @Description: file content
  */
 import { notification } from "antd";
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
 export interface normalResults {
   message: string;
 }
@@ -20,6 +20,23 @@ export const http = async <T>(
   };
 
   const doHttp = axios.create(config);
+
+  doHttp.interceptors.request.use(
+    (config: AxiosRequestConfig) => {
+      // 在发送请求之前做些什么
+      const token: string | null = localStorage.getItem("Authorization");
+      if (token) {
+        const headers: AxiosRequestHeaders | undefined = config.headers;
+        if (headers) headers["Authorization"] = token;
+      }
+
+      return config;
+    },
+    (error: any) => {
+      // 对请求错误做些什么
+      return Promise.reject(error);
+    }
+  );
 
   doHttp.interceptors.response.use(
     (response: { data: { code?: any; data?: any; message?: any } }) => {

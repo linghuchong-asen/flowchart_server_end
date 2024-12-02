@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-13 10:00:33
- * @LastEditTime: 2024-11-29 14:12:14
+ * @LastEditTime: 2024-12-02 11:12:53
  * @Description: file content
  */
 
@@ -44,7 +44,7 @@ export const HomePage = () => {
 
   useEffect(() => {
     if (DownloadUrl?.data.url) {
-      // todo：这里url是reat router的地址，还是后端返回的一个完整的http网址；导出按钮就是执行这个逻辑，还有必要在useEffect中再写一遍吗？
+      // todo：这里url是react router的地址，还是后端返回的一个完整的http网址；导出按钮就是执行这个逻辑，还有必要在useEffect中再写一遍吗？
       window.open(DownloadUrl.data.url, "_self");
     }
   }, [DownloadUrl?.data.url]);

@@ -1,19 +1,19 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-06 12:22:01
- * @LastEditTime: 2024-11-28 15:31:41
+ * @LastEditTime: 2024-12-02 11:28:01
  * @Description: 编辑器index
  */
 
 import { Cell, Graph } from "@antv/x6";
 import styled from "@emotion/styled";
-import { Row, Col } from "antd";
+import { Row, Col, notification } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getSVgImgUrl } from "../../utils";
 import { useGraph } from "../../utils/hooks/useGraph";
 import { fromjsonData } from "../preView";
-import { useGetEditordata } from "../preView/server";
+import { useGetEditorData } from "../preView/server";
 import { CellAttrs } from "./components/configPanel";
 import { NodeTypes } from "./components/node_types";
 import ToolBar from "./components/toolBar";
@@ -112,7 +112,11 @@ export const X6Page = () => {
   const [attrVisible, setAttrVisible] = useState<boolean>(false);
   const [preData, setPreData] = useState<fromjsonData[]>([]);
   const [miniVisible, setMiniVisible] = useState<boolean>(true)
-  const { data } = useGetEditordata({ projectId: projectid });
+
+  if (!projectid) {
+    notification.error({ message: '项目id为空' })
+  }
+  const { data: editorDataResponse } = useGetEditorData({ projectId: projectid as string });
 
   useEffect(() => {
     // 处理获取到的editor数据
@@ -128,11 +132,11 @@ export const X6Page = () => {
       });
       return result;
     }
-    if (data) {
-      const { editData } = data.data;
-      setPreData(dataClean(editData));
+    if (editorDataResponse?.data) {
+      const { editorData } = editorDataResponse.data;
+      setPreData(dataClean(editorData));
     }
-  }, [data]);
+  }, [editorDataResponse]);
   // 0:画布 1：点 2：边
   const [clickType, setClickType] = useState<number>(0);
 

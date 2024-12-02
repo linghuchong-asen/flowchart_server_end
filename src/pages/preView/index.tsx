@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-13 10:50:37
- * @LastEditTime: 2022-05-06 16:38:04
+ * @LastEditTime: 2024-12-02 16:49:57
  * @Description: 预览页面
  */
 
@@ -10,7 +10,8 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getSVgImgUrl } from "../../utils";
 import { useGraph } from "../../utils/hooks/useGraph";
-import { useGetEditordata } from "./server";
+import { useGetEditorData } from "./server";
+import { notification } from "antd";
 interface PreviewUrlParams {
   projectid: string;
 }
@@ -30,22 +31,27 @@ function dataClean(data: fromjsonData[]) {
 }
 
 export const PreViewPage = () => {
-  console.log('yulan');
   const { projectid } = useParams<keyof PreviewUrlParams>();
-  const { data } = useGetEditordata({ projectId: projectid });
+  if (!projectid) {
+    notification.error({
+      message: "项目id为空",
+    });
+  };
+  const { data } = useGetEditorData({ projectId: projectid as string });
 
   const graph = useGraph({
     id: "container",
     callback: () => { },
     isPreview: true,
   });
-  let result: fromjsonData[] = [];
-  if (data) {
-    const { editData } = data.data;
-    result = dataClean(editData);
-  }
-  if (graph) {
-    graph?.fromJSON(result);
-  }
+
+  useEffect(() => {
+    if (data?.data && graph) {
+      const { editorData } = data.data;
+      const result = dataClean(editorData);
+      graph?.fromJSON(result);
+    }
+  }, [data, graph]);
+
   return <div id="container" style={{ width: "100vw", height: "100vh" }} />;
 };
