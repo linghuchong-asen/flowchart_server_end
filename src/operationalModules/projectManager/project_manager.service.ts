@@ -1,4 +1,11 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  UseInterceptors,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProjectEntity } from './project_manager.entity';
 import { Repository } from 'typeorm';
@@ -25,7 +32,8 @@ export class ProjectService {
   ) {}
 
   /* 新建项目 */
-  async create(project: CreateProjectDto): Promise<ProjectResponseDto> {
+  // @UseInterceptors(ClassSerializerInterceptor)
+  async create(project: ProjectEntity): Promise<ProjectEntity> {
     // todo: 当没有传project_desc字段时，mysql中会存储为什么
     const { project_name } = project;
     if (!project_name) {
@@ -40,8 +48,10 @@ export class ProjectService {
     // const projectEntity = plainToInstance(ProjectEntity, project);
     // this.projectRepository.create(project);
 
+    /* TypeORM会将查询结果转换为类实例，所以savedProject是一个类实例对象(此处为CreateProjectDto)，返回前端的通常是普通对象 */
+    /* save方法返回的实例对象类型是与传入参数一致的，比如传入的的是CreateProjectDto返回的也是CreateProjectDto；传入的ProjectEntity返回的也是ProjectEntity */
     const savedProject = await this.projectRepository.save(project);
-    // TypeORM会将查询结果转换为类实例，所以savedProject是一个类实例对象，返回前端的通常是普通对象（使用{}字面量或Object.create()创建的对象，它们没有构造函数或类的方法）
+
     const c = instanceToPlain(savedProject);
     const a = instanceToPlain(savedProject);
     const responseData = plainToInstance(ProjectResponseDto, a);
@@ -49,7 +59,7 @@ export class ProjectService {
     const b = plainToInstance(ProjectResponseDto, a);
 
     // const result = instanceToPlain(a);
-    return responseData;
+    return savedProject;
   }
 
   /**  获取项目列表 */

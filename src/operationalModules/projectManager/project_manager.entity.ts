@@ -3,9 +3,10 @@
  * @Author: yangsen
  * @Date: 2022-04-03 22:27:54
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-29 16:47:33
+ * @LastEditTime: 2024-12-02 10:02:50
  */
 
+import { Expose } from 'class-transformer';
 import {
   Column,
   Entity,
@@ -17,8 +18,10 @@ import {
 export class ProjectEntity {
   @PrimaryGeneratedColumn('uuid')
   id?: string; // 标记为主键，值自动生成
+  @Expose({ name: 'projectName' })
   @Column({ length: 50 })
   project_name: string;
+  @Expose({ name: 'projectDesc' })
   @Column('text')
   project_desc: string;
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
