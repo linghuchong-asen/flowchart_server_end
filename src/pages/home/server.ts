@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-19 10:20:08
- * @LastEditTime: 2024-11-29 16:41:57
+ * @LastEditTime: 2024-12-02 17:25:16
  * @Description: 项目管理模块，后端api
  */
 
@@ -85,7 +85,7 @@ export const useDeleteProject = () => {
   return useMutation(
     (params: { projectIds: string[] }) =>
       http(`/project/delProject`, {
-        method: "post",
+        method: "delete",
         params,
       }),
     {
