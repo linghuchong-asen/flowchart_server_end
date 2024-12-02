@@ -1,3 +1,4 @@
+import { EditorDocument } from './../editorDocument/schemas/editor_document.schema';
 import {
   ClassSerializerInterceptor,
   HttpException,
@@ -17,6 +18,7 @@ import {
 } from 'class-transformer';
 import { ProjectResponseDto } from './dto/project_response.dto';
 import { CreateProjectDto } from './dto/create_project.dto';
+import { EditorDocumentService } from '../editorDocument/editor_document.service';
 
 const logger = new Logger('ProjectService');
 
@@ -30,6 +32,7 @@ export class ProjectService {
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
     private readonly dataSource: DataSource,
+    private readonly editorDocumentService: EditorDocumentService,
   ) {}
 
   /* 新建项目 */
@@ -107,6 +110,13 @@ export class ProjectService {
     const queryRunner = this.dataSource.createQueryRunner();
     try {
       ids.forEach(async (id) => {
+        const editorDocument = await this.editorDocumentService.getDocumentById(
+          id,
+        );
+        if (editorDocument) {
+          await this.editorDocumentService.removeById(id);
+        }
+
         const existProject = await queryRunner.manager.findOne(ProjectEntity, {
           where: [{ id }],
         });

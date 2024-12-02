@@ -1,3 +1,4 @@
+import { EditorDocumentService } from './../editorDocument/editor_document.service';
 import {
   Body,
   ClassSerializerInterceptor,

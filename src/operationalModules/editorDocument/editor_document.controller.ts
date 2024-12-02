@@ -38,13 +38,6 @@ export class EditorDocumentController {
     return result;
   }
 
-  /** 获取所有文档 */
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  async getAllEditorDocument() {
-    return await this.editorDocumentService.getAllDocuments();
-  }
-
   /** 根据id删除文档 */
   @Delete(':id')
   @UseGuards(JwtAuthGuard)

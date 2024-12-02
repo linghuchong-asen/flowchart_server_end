@@ -41,11 +41,6 @@ export class EditorDocumentService {
     }
   }
 
-  /** 获取所有编辑器文档 */
-  async getAllDocuments(): Promise<EditorDocument[]> {
-    return await this.editorDocumentModel.find().exec();
-  }
-
   /** 根据id获取编辑器文档 */
   async getDocumentById(id: string): Promise<EditorDocument> | null {
     try {
@@ -67,10 +62,11 @@ export class EditorDocumentService {
   }
 
   /** 根据项目id删除数据 */
-  async removeById(id: string): Promise<any> {
+  async removeById(projectId: string): Promise<any> {
     try {
-      const objectId = new ObjectId(id);
-      return await this.editorDocumentModel.findByIdAndDelete(objectId).exec();
+      return await this.editorDocumentModel
+        .findOneAndDelete({ projectId })
+        .exec();
     } catch (err) {
       logger.error('根据id删除文档', err);
       throw new HttpException(

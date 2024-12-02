@@ -3,10 +3,11 @@ import { ProjectController } from './project_manager.controller';
 import { ProjectService } from './project_manager.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProjectEntity } from './entities/project_manager.entity';
+import { EditorDocumentService } from '../editorDocument/editor_document.service';
 
 @Module({
   /*TypeOrmModule.forFeature方法的主要作用是将指定的实体（如PostsEntity)注册到当前的Nst]S模块中，以便在该模块中可以直接注入和使用这些实体*/
-  imports: [TypeOrmModule.forFeature([ProjectEntity])],
+  imports: [TypeOrmModule.forFeature([ProjectEntity]), EditorDocumentService],
   controllers: [ProjectController],
   providers: [ProjectService],
 })
