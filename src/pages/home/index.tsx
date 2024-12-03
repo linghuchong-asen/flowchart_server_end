@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-13 10:00:33
- * @LastEditTime: 2024-12-02 17:21:43
+ * @LastEditTime: 2024-12-03 11:01:08
  * @Description: file content
  */
 
@@ -107,9 +107,9 @@ export const HomePage = () => {
         >
           新建项目
         </Button>
-        {/* <Button type="primary" style={{ marginLeft: "20px" }}>
+        <Button type="primary" style={{ marginLeft: "20px" }}>
           <Link to="/outsys">导入外部系统</Link>
-        </Button> */}
+        </Button>
         <Table
           loading={isFetching}
           style={{ marginTop: "20px" }}
