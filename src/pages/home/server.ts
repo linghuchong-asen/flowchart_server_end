@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-19 10:20:08
- * @LastEditTime: 2024-12-02 17:25:16
+ * @LastEditTime: 2024-12-03 22:50:11
  * @Description: 项目管理模块，后端api
  */
 
@@ -41,7 +41,7 @@ interface useGetDownloadprop {
   data: { url: string };
 }
 export const useGetDownload = (params: { projectId: string | undefined }) => {
-  return useQuery<useGetDownloadprop>(
+  return useMutation<useGetDownloadprop>(
     ["useGetProject", params],
     () => http("/project/editDataFile", { params }),
     useNormalQueryOptions({ enabled: params.projectId !== undefined })

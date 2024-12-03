@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-13 10:00:33
- * @LastEditTime: 2024-12-03 11:01:08
+ * @LastEditTime: 2024-12-03 22:50:38
  * @Description: file content
  */
 
@@ -42,12 +42,12 @@ export const HomePage = () => {
   const { confirm } = Modal;
 
 
-  useEffect(() => {
-    if (DownloadUrl?.data.url) {
-      // todo：这里url是react router的地址，还是后端返回的一个完整的http网址；导出按钮就是执行这个逻辑，还有必要在useEffect中再写一遍吗？
-      window.open(DownloadUrl.data.url, "_self");
-    }
-  }, [DownloadUrl?.data.url]);
+  // useEffect(() => {
+  //   if (DownloadUrl?.data.url) {
+  //     // todo：这里url是react router的地址，还是后端返回的一个完整的http网址；导出按钮就是执行这个逻辑，还有必要在useEffect中再写一遍吗？
+  //     window.open(DownloadUrl.data.url, "_self");
+  //   }
+  // }, [DownloadUrl?.data.url]);
 
 
   let tableSource: GetProjectQueryData["data"] = {
