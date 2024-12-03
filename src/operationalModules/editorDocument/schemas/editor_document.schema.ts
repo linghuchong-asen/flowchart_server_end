@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { SchemaTypes } from 'mongoose';
 
 /*  有必要写extends Document吗？没必要，没有写也一样正常运行 */
 @Schema({ collection: 'editorData' }) // 指定集合名称，这样就会在MongoDB创建一个集合

@@ -37,6 +37,7 @@ export class EditorDocumentService {
         if (saveResult) return {};
       } catch (err) {
         logger.error('创建文档失败', err);
+        throw new HttpException('创建文档失败', 500);
       }
     }
   }

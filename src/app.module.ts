@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PostsModule } from './operationalModules/projectManager/project_manager.module';
+import { ProjectManagerModule } from './operationalModules/projectManager/project_manager.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import envConfig from '../config/env';
@@ -60,7 +60,7 @@ import { EditorDocumentModule } from './operationalModules/editorDocument/editor
       // 静态资源目录，项目启动后代码会被打包进dist文件夹;这里要结合multer储存位置决定
       rootPath: path.resolve(__dirname, '../../', 'uploads'),
     }),
-    PostsModule,
+    ProjectManagerModule,
     UserModule,
     AuthModule,
     // RedisCacheModule,

@@ -12,7 +12,7 @@ import * as path from 'path';
     MulterModule.register({
       /*  diskStorage 来配置文件存储路径和文件命名规则 */
       storage: diskStorage({
-        destination: path.resolve('/Users/code/nest-demo/uploads'), // 指定文件存储的目录
+        destination: path.resolve('/Users/code/flowchart_server_end/uploads'), // 指定文件存储的目录
         filename: (req, file, cb) => {
           // logger.log(path.join('/uploads')); // \uploads 这个实际也是储存在D:\uploads目录下
           // logger.log(path.join(__dirname, '/uploads')); // D:\Users\code\nest-demo\dist\src\user\uploads

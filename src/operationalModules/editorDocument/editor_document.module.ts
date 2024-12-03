@@ -3,7 +3,7 @@
  * @Author: yangsen
  * @Date: 2022-04-19 09:31:59
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-25 18:13:49
+ * @LastEditTime: 2024-12-03 17:53:43
  */
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -25,5 +25,6 @@ import { EditorDocumentService } from './editor_document.service';
   ],
   controllers: [EditorDocumentController],
   providers: [EditorDocumentService],
+  exports: [EditorDocumentService],
 })
 export class EditorDocumentModule {}

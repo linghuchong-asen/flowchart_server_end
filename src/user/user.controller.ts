@@ -43,7 +43,7 @@ export class UserController {
   // @UseGuards(AuthGuard('jwt')) // 这种方式能调用JwtStrategy，但是不能调用到JwtAuthGuard
   @UseInterceptors(
     //  NOTE:第一个参数要和传参中file类型的字段名称一致
-    FilesInterceptor('avatar', 10), //FilesInterceptor 是一个特定的拦截器，用于处理多文件上传。
+    FilesInterceptor('avatar', 10), //FilesInterceptor 是一个特定的拦截器，用于处理多文件上传。会将拦截到的文件交给multer处理
   )
   async update(
     @UploadedFiles() files: Express.Multer.File[],
