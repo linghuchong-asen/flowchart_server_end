@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   HttpException,
   Logger,
   Param,
@@ -11,6 +12,7 @@ import {
   Put,
   Query,
   Res,
+  StreamableFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -22,11 +24,13 @@ import { JwtAuthGuard } from 'src/auth/auth.guard';
 import * as path from 'path';
 import * as fs from 'fs';
 import { Response } from 'express';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 
 const logger = new Logger('ProjectController');
 
 @Controller('project') // 路径为/project
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 export class ProjectManagerController {
   constructor(private readonly projectService: ProjectManagerService) {}
 
@@ -84,8 +88,9 @@ export class ProjectManagerController {
   }
 
   /** 导出指定项目的编辑器json文件 */
+  // todo:@Headers @Header装饰器的使用
   @Get('editDataFile')
-  async exportEditorDataFile(@Query() reqParams, @Res() res: Response) {
+  async exportEditorDataFile(@Query() reqParams) {
     const { projectId } = reqParams;
     const filePath = await this.projectService.exportEditorDataFile(projectId);
     if (!filePath) {
@@ -93,22 +98,22 @@ export class ProjectManagerController {
     }
     // 可以获取带有后缀的文件名，path模块还能不同平台分割符的问题
     const fileName = path.basename(filePath);
-    res.setHeader('Content-Type', 'application/octet-stream');
-    res.setHeader('Content-disposition', `attachment; filename=${fileName}`);
 
-    // 读取文件并返回
-    const fileStream = fs.createReadStream(filePath);
-    /* pipe 方法是 Node.js 流（Stream）模块中的一个方法，用于将一个可读流（Readable Stream）的数据传输到一个可写流（Writable Stream）。在这个上下文中，fileStream 是一个可读流，表示从文件系统中读取的文件数据，而 res 是一个可写流，表示 HTTP 响应。 */
-    fileStream.pipe(res);
+    // 读取文件并返回;
+    const fileStream = createReadStream(filePath);
+    // fileStream.pipe(res); // nestjs文档返回文件流推荐使用StreamableFile对象
 
-    // 下载完成后删除临时文件
+    // 下载完成后删除临时文件;
     fileStream.on('end', () => {
       fs.unlinkSync(filePath);
     });
     fileStream.on('error', (err) => {
       logger.error('文件下载失败', err);
-      res.destroy(err);
       throw new HttpException('文件下载失败', 500);
+    });
+    return new StreamableFile(fileStream, {
+      type: 'application/json',
+      disposition: `attachment; filename=${fileName}`,
     });
   }
 }
