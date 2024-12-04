@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-13 10:00:33
- * @LastEditTime: 2024-12-03 22:50:38
+ * @LastEditTime: 2024-12-04 18:58:35
  * @Description: file content
  */
 
@@ -21,6 +21,8 @@ import {
   useGetProject,
   useImportProject
 } from "./server";
+import { http } from "../../utils/http";
+import axios from "axios";
 
 
 export interface tableDataProp {
@@ -38,7 +40,7 @@ export const HomePage = () => {
   const [importId, setImportId] = useState<string>()
   const [fileList, setFileList] = useState<UploadFile<unknown>[]>([]);
   const { data: projectListResponse, isSuccess, isFetching } = useGetProject(params);
-  const { data: DownloadUrl } = useGetDownload({ projectId: nowid });
+  const { mutateAsync: DownloadRequest } = useGetDownload();
   const { confirm } = Modal;
 
 
@@ -141,12 +143,45 @@ export const HomePage = () => {
                     编辑
                   </a>
                   <a
-                    onClick={() => {
-                      if (record.projectId === nowid && DownloadUrl) {
-                        window.open(DownloadUrl.data.url, "_self");
-                      }
-                      setNowid(record.projectId);
+                    onClick={async () => {
+                      // if (record.projectId === nowid && DownloadUrl) {
+                      //   window.open(DownloadUrl.data.url, "_self");
+                      // }
+                      // setNowid(record.projectId);
+                      // DownloadRequest(record.projectId)
+                      const response = await http("/project/editDataFile", {
+                        method: "get",
+                        params: { projectId: record.projectId },
+                        responseType: "blob"
+                      }).catch((err) => {
+                        console.error(err)
+                      })
+                      if (!response) return
+                      const blobUrl = window.URL.createObjectURL(response.data as Blob);
+
+
+                      // const url = window.URL.createObjectURL(new Blob([response.data]));
+                      const a = document.createElement("a");
+                      a.href = blobUrl;
+                      a.download = "editDataFile.json"; // 设置文件名
+                      a.click();
+                      URL.revokeObjectURL(blobUrl);
+                      console.log('返回的数据', response);
+                      // axios({
+                      //   method: 'get',
+                      //   url: 'http://127.0.0.1:3001/project/editDataFile',
+                      //   responseType: 'stream', // 设置响应类型为流
+                      //   params: { projectId: record.projectId }
+                      // }).then(response => {
+                      //   // 处理响应
+                      //   // response.data.pipe(fs.createWriteStream('output.txt')); // 示例：将流写入文件
+                      //   console.log(response);
+                      // }).catch(error => {
+                      //   console.error('请求失败:', error);
+                      // });
                     }}
+                  // href={`/project/editDataFile?projectId=${record.projectId}`}
+                  // target="_self"
                   >
                     导出
                   </a>
@@ -257,7 +292,7 @@ export const HomePage = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </div >
   );
 };
 interface PopPagePro {

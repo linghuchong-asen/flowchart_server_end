@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2021-11-04 14:51:57
- * @LastEditTime: 2024-12-02 14:46:46
+ * @LastEditTime: 2024-12-04 15:55:40
  * @Description: file content
  */
 import { notification } from "antd";
@@ -40,10 +40,13 @@ export const http = async <T>(
 
   doHttp.interceptors.response.use(
     (response: { data: { code?: any; data?: any; message?: any } }) => {
+      console.log("axios响应拦截器中点response", response);
       // 拦截响应，做统一处理
       if (response.data.code === 0) {
         const { data, code, message } = response.data;
         return { data, code, message };
+      } else if (response.data instanceof Blob) {
+        return response;
       } else {
         return Promise.reject(response.data);
       }

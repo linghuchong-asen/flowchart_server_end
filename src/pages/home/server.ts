@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-19 10:20:08
- * @LastEditTime: 2024-12-03 22:50:11
+ * @LastEditTime: 2024-12-04 19:00:46
  * @Description: 项目管理模块，后端api
  */
 
@@ -37,14 +37,24 @@ export const useGetProject = (params: {
 };
 
 // todo：返回一个url是什么意思，是MongoDB上的存储地址吗?为什么不是直接返回数据
-interface useGetDownloadprop {
-  data: { url: string };
-}
-export const useGetDownload = (params: { projectId: string | undefined }) => {
-  return useMutation<useGetDownloadprop>(
-    ["useGetProject", params],
-    () => http("/project/editDataFile", { params }),
-    useNormalQueryOptions({ enabled: params.projectId !== undefined })
+// interface useGetDownloadprop {
+//   data: { url: string };
+// }
+export const useGetDownload = () => {
+  return useMutation(
+    (projectId: string) =>
+      http("/project/editDataFile", {
+        method: "get",
+        params: { projectId },
+        responseType: "blob",
+      }),
+    {
+      onSuccess: (response) => {
+        const { data, message } = response;
+        console.log("导出json文件", data);
+      },
+      onError: onErrorTips,
+    }
   );
 };
 
