@@ -1,11 +1,15 @@
 /*
  * @Author: yangsen
  * @Date: 2021-11-04 14:51:57
- * @LastEditTime: 2024-12-04 15:55:40
+ * @LastEditTime: 2024-12-04 22:44:21
  * @Description: file content
  */
 import { notification } from "antd";
-import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
+import axios, {
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+  AxiosResponse,
+} from "axios";
 export interface normalResults {
   message: string;
 }
@@ -39,7 +43,7 @@ export const http = async <T>(
   );
 
   doHttp.interceptors.response.use(
-    (response: { data: { code?: any; data?: any; message?: any } }) => {
+    (response: AxiosResponse) => {
       console.log("axios响应拦截器中点response", response);
       // 拦截响应，做统一处理
       if (response.data.code === 0) {
@@ -48,6 +52,13 @@ export const http = async <T>(
       } else if (response.data instanceof Blob) {
         return response;
       } else {
+        if (!response.data?.code) {
+          notification.error({
+            message: "发生错误",
+            description: response.data.message || "未知错误",
+          });
+          console.error("接口返回数据异常", response);
+        }
         return Promise.reject(response.data);
       }
     },
@@ -76,3 +87,12 @@ export const onErrorTips = (error: { message: string }) => {
     description: error.message,
   });
 };
+
+// /** 用于下载文件的场景，返回的数据类型为Blob */
+// export const requestForFile = () => {
+//   const request =  axios.create({
+//     method: "get",
+//     baseURL: "/api",
+//     responseType: "blob",
+//   })
+// }
