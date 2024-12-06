@@ -36,7 +36,9 @@ export class TransformInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data) => {
         // 移除响应头中的ETag字段
-        // const response = context.switchToHttp().getResponse();
+        const response = context.switchToHttp().getResponse();
+        // response.setHeader('ContentDisposition', 'attachment');
+        // response.setHeader('Content-Type', 'application/octet-stream');
         // response.removeHeader('ETag');
         // logger.log(typeof data === 'object' ? JSON.stringify(data) : data);
         return {

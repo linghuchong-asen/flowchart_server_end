@@ -90,7 +90,7 @@ export class ProjectManagerController {
   /** 导出指定项目的编辑器json文件 */
   // todo:@Headers @Header装饰器的使用
   @Get('editDataFile')
-  async exportEditorDataFile(@Query() reqParams) {
+  async exportEditorDataFile(@Query() reqParams, @Res() res) {
     const { projectId } = reqParams;
     const filePath = await this.projectService.exportEditorDataFile(projectId);
     if (!filePath) {
@@ -101,7 +101,12 @@ export class ProjectManagerController {
 
     // 读取文件并返回;
     const fileStream = createReadStream(filePath);
+    res.set({
+      'Content-Type': 'application/json',
+      'Content-Disposition': `attachment; filename=${fileName}`, // 浏览器直接访问路由将直接弹出保存窗口
+    });
     // fileStream.pipe(res); // nestjs文档返回文件流推荐使用StreamableFile对象
+    // return res;
 
     // 下载完成后删除临时文件;
     fileStream.on('end', () => {
@@ -113,7 +118,7 @@ export class ProjectManagerController {
     });
     return new StreamableFile(fileStream, {
       type: 'application/json',
-      disposition: `attachment; filename=${fileName}`,
+      disposition: `attachment; filename=${fileName}`, // 浏览器直接访问路由将直接弹出保存窗口
     });
   }
 }
