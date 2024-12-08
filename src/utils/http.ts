@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2021-11-04 14:51:57
- * @LastEditTime: 2024-12-04 22:44:21
+ * @LastEditTime: 2024-12-07 17:16:05
  * @Description: file content
  */
 import { notification } from "antd";
@@ -31,7 +31,11 @@ export const http = async <T>(
       const token: string | null = localStorage.getItem("Authorization");
       if (token) {
         const headers: AxiosRequestHeaders | undefined = config.headers;
-        if (headers) headers["Authorization"] = token;
+        if (headers) {
+          headers["Authorization"] = token;
+          headers["Cache-Control"] =
+            props?.headers?.["Cache-Control"] ?? "no-cache";
+        }
       }
 
       return config;

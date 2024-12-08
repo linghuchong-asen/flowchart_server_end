@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-06 11:31:01
- * @LastEditTime: 2024-11-27 11:34:54
+ * @LastEditTime: 2024-12-08 21:24:44
  * @Description: file content
  */
 import { defineConfig } from "vite";
@@ -11,7 +11,18 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   build: {
-    minify: true,
+    // 压缩代码
+    minify: false,
+    rollupOptions: {
+      output: {
+        // 定义JavaScript文件的输出路径和命名规则
+        entryFileNames: "[name]-[hash].js",
+        // 定义非入口文件的输出路径和命名规则
+        chunkFileNames: "[name]-[hash].js",
+        // 定义其他资产文件的输出路径和命名规则
+        assetFileNames: "assets/[name]-[hash][extname]",
+      },
+    },
   },
   css: {
     preprocessorOptions: {
