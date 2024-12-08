@@ -5,12 +5,14 @@ import {
   Delete,
   Get,
   Header,
+  Headers,
   HttpException,
   Logger,
   Param,
   Post,
   Put,
   Query,
+  Req,
   Res,
   StreamableFile,
   UseGuards,
@@ -26,6 +28,7 @@ import * as fs from 'fs';
 import { Response } from 'express';
 import { createReadStream } from 'fs';
 import { join } from 'path';
+import { SkipInterceptor } from 'src/core/interceptor/skip.interceptor';
 
 const logger = new Logger('ProjectController');
 
@@ -88,9 +91,9 @@ export class ProjectManagerController {
   }
 
   /** 导出指定项目的编辑器json文件 */
-  // todo:@Headers @Header装饰器的使用
   @Get('editDataFile')
-  async exportEditorDataFile(@Query() reqParams, @Res() res) {
+  @SkipInterceptor()
+  async exportEditorDataFile(@Query() reqParams) {
     const { projectId } = reqParams;
     const filePath = await this.projectService.exportEditorDataFile(projectId);
     if (!filePath) {
@@ -101,12 +104,14 @@ export class ProjectManagerController {
 
     // 读取文件并返回;
     const fileStream = createReadStream(filePath);
-    res.set({
-      'Content-Type': 'application/json',
-      'Content-Disposition': `attachment; filename=${fileName}`, // 浏览器直接访问路由将直接弹出保存窗口
-    });
-    // fileStream.pipe(res); // nestjs文档返回文件流推荐使用StreamableFile对象
-    // return res;
+
+    /* 以下是使用express的res的响应方式，使用了express的响应对象，nestjs就失去了对响应对象的控制；
+      nestjs文档返回文件流推荐使用StreamableFile对象 */
+    // res.set({
+    //   'Content-Type': 'application/json',
+    //   'Content-Disposition': `attachment; filename=${fileName}`,
+    // });
+    // fileStream.pipe(res);
 
     // 下载完成后删除临时文件;
     fileStream.on('end', () => {

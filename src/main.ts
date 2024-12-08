@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './core/filter/http-exception/http_exception.filter';
 import { TransformInterceptor } from './core/interceptor/transform/transform.interceptor';
@@ -9,7 +9,7 @@ async function bootstrap() {
   // 注册全局错误的过滤器
   app.useGlobalFilters(new HttpExceptionFilter());
   // 注册全局拦截器
-  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(new TransformInterceptor(new Reflector()));
   // 注册全局管道
   app.useGlobalPipes(new ValidationPipe());
   // process是nodejs的全局变量

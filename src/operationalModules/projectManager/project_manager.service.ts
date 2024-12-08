@@ -8,6 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as path from 'path';
 import * as fs from 'fs';
+import { ConfigService } from '@nestjs/config';
 
 const logger = new Logger('ProjectService');
 
@@ -25,6 +26,7 @@ export class ProjectManagerService {
     private readonly editorDocumentService: EditorDocumentService,
     @InjectModel(EditorDocument.name)
     private readonly editorDocumentModel: Model<EditorDocument>,
+    private readonly configService: ConfigService,
   ) {}
 
   /* 新建项目 */
@@ -147,9 +149,10 @@ export class ProjectManagerService {
 
       // 创建临时文件路径
       // todo:改成从变量或者从环境变量读取，nestjs中有全局变量一说吗？
-      const filePath = path.resolve(
-        '/Users/code/flowchart_server_end/tempFiles',
-      );
+      // const tempFilePath = this.configService.get('TEMP_FILE_PATH');
+      // if (!tempFilePath) throw new Error('未设置临时文件路径');
+      const filePath = path.resolve(__dirname, '../../../../tempFiles'); // 运行时是在dist目录下
+      logger.log(`临时文件路径为${filePath}`);
       const date = new Date();
       // todo：日期错误
       const createTime = `${date.getFullYear()}-${date

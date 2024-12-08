@@ -12,14 +12,14 @@ import * as path from 'path';
     MulterModule.register({
       /*  diskStorage 来配置文件存储路径和文件命名规则 */
       storage: diskStorage({
-        destination: path.resolve('/Users/code/flowchart_server_end/uploads'), // 指定文件存储的目录
+        destination: path.resolve(__dirname, '../../uploads'), // 指定文件存储的目录
         filename: (req, file, cb) => {
           // logger.log(path.join('/uploads')); // \uploads 这个实际也是储存在D:\uploads目录下
           // logger.log(path.join(__dirname, '/uploads')); // D:\Users\code\nest-demo\dist\src\user\uploads
-          // logger.log(path.resolve(__dirname, '../../uploads')); // D:\Users\code\nest-demo\dist\uploads
+          // logger.log(path.resolve(__dirname, '../../uploads')); // D:\Users\code\nest-demo\dist\uploads 使用这个合适，resolve返回绝对路径
           // logger.log(path.resolve(__dirname, '/uploads')); //D:\uploads
           // logger.log(path.join('/Users/code/nest-demo/uploads')); // \Users\code\nest-demo\uploads 实际也是D盘
-          // logger.log(path.resolve('/Users/code/nest-demo/uploads')); // D:\Users\code\nest-demo\uploads 使用这个合适，resolve返回绝对路径
+          // logger.log(path.resolve('/Users/code/nest-demo/uploads')); // D:\Users\code\nest-demo\uploads
 
           const uniqueSuffix =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
