@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2021-11-04 14:51:57
- * @LastEditTime: 2024-12-07 17:16:05
+ * @LastEditTime: 2024-12-09 23:01:26
  * @Description: file content
  */
 import { notification } from "antd";
@@ -33,8 +33,6 @@ export const http = async <T>(
         const headers: AxiosRequestHeaders | undefined = config.headers;
         if (headers) {
           headers["Authorization"] = token;
-          headers["Cache-Control"] =
-            props?.headers?.["Cache-Control"] ?? "no-cache";
         }
       }
 
@@ -53,7 +51,7 @@ export const http = async <T>(
       if (response.data.code === 0) {
         const { data, code, message } = response.data;
         return { data, code, message };
-      } else if (response.data instanceof Blob) {
+      } else if (response.config.responseType === "blob") {
         return response;
       } else {
         if (!response.data?.code) {
@@ -71,17 +69,29 @@ export const http = async <T>(
       return Promise.reject(error);
     }
   );
-  if (config.method !== "get" && config.method !== "delete") {
-    const dataT = await doHttp({ url, data: params });
-    const { data, code, message }: { data: T; code: number; message: string } =
-      dataT as any;
-    return { data, code, message };
-  } else {
-    const p = params ? { url, params } : { url };
-    const dataT = await doHttp(p);
-    const { data, code, message }: { data: T; code: number; message: string } =
-      dataT as any;
-    return { data, code, message };
+  try {
+    if (config.responseType === "blob")
+      return await doHttp({ url, responseType: "blob" });
+    if (config.method !== "get" && config.method !== "delete") {
+      const dataT = await doHttp({ url, data: params });
+      const {
+        data,
+        code,
+        message,
+      }: { data: T; code: number; message: string } = dataT as any;
+      return { data, code, message };
+    } else {
+      const p = params ? { url, params } : { url };
+      const dataT = await doHttp(p);
+      const {
+        data,
+        code,
+        message,
+      }: { data: T; code: number; message: string } = dataT as any;
+      return { data, code, message };
+    }
+  } catch (err) {
+    throw new Error(typeof err === "string" ? err : JSON.stringify(err));
   }
 };
 
