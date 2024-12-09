@@ -24,7 +24,7 @@ export class TransformInterceptor implements NestInterceptor {
     /* context.switchToHttp().getResponse() 方法用于获取当前 HTTP 响应对象，但这个对象主要用于设置响应的状态码、头信息等，而不是直接获取返回的数据 */
     const response = context.switchToHttp().getResponse();
 
-    // 跳过全局拦截器
+    // 判断是否需要跳过全局拦截器; context.getHandler()返回的是当前的路由
     const isSkip = this.reflector.get('skipInterceptor', context.getHandler());
     logger.log(
       '是否跳过全局拦截器',
@@ -42,10 +42,10 @@ export class TransformInterceptor implements NestInterceptor {
         // response.setHeader('ContentDisposition', 'attachment');
         // response.setHeader('Content-Type', 'application/octet-stream');
         // response.removeHeader('ETag');
-        logger.log(
-          'interceptor响应数据',
-          typeof data === 'string' ? data : JSON.stringify(data),
-        );
+        // logger.log(
+        //   'interceptor响应数据',
+        //   typeof data === 'string' ? data : JSON.stringify(data),
+        // );
         return {
           code: 0,
           data,
