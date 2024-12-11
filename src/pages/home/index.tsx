@@ -167,21 +167,7 @@ export const HomePage = () => {
                       a.click();
                       URL.revokeObjectURL(blobUrl);
                       console.log('返回的数据', response);
-                      // axios({
-                      //   method: 'get',
-                      //   url: 'http://127.0.0.1:3001/project/editDataFile',
-                      //   responseType: 'stream', // 设置响应类型为流
-                      //   params: { projectId: record.projectId }
-                      // }).then(response => {
-                      //   // 处理响应
-                      //   // response.data.pipe(fs.createWriteStream('output.txt')); // 示例：将流写入文件
-                      //   console.log(response);
-                      // }).catch(error => {
-                      //   console.error('请求失败:', error);
-                      // });
                     }}
-                  // href={`/project/editDataFile?projectId=${record.projectId}`}
-                  // target="_self"
                   >
                     导出
                   </a>

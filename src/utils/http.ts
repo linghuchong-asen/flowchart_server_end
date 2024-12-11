@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2021-11-04 14:51:57
- * @LastEditTime: 2024-12-09 23:01:26
+ * @LastEditTime: 2024-12-11 22:59:44
  * @Description: file content
  */
 import { notification } from "antd";
@@ -70,8 +70,11 @@ export const http = async <T>(
     }
   );
   try {
-    if (config.responseType === "blob")
-      return await doHttp({ url, responseType: "blob" });
+    if (config.responseType === "blob") {
+      const data = await doHttp({ url });
+      return data;
+    }
+
     if (config.method !== "get" && config.method !== "delete") {
       const dataT = await doHttp({ url, data: params });
       const {
