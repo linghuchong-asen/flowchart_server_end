@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-13 10:00:33
- * @LastEditTime: 2024-12-04 18:58:35
+ * @LastEditTime: 2024-12-12 16:32:32
  * @Description: file content
  */
 
@@ -35,7 +35,7 @@ export interface tableDataProp {
 export const HomePage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [params, setParams] = useState({ pageSize: 10, pageNumber: 1 });
-  const [nowid, setNowid] = useState<string>();
+  // const [nowid, setNowid] = useState<string>();
   const [localVisible, setLocalVisible] = useState<boolean>(false)
   const [importId, setImportId] = useState<string>()
   const [fileList, setFileList] = useState<UploadFile<unknown>[]>([]);
@@ -44,12 +44,7 @@ export const HomePage = () => {
   const { confirm } = Modal;
 
 
-  // useEffect(() => {
-  //   if (DownloadUrl?.data.url) {
-  //     // todo：这里url是react router的地址，还是后端返回的一个完整的http网址；导出按钮就是执行这个逻辑，还有必要在useEffect中再写一遍吗？
-  //     window.open(DownloadUrl.data.url, "_self");
-  //   }
-  // }, [DownloadUrl?.data.url]);
+
 
 
   let tableSource: GetProjectQueryData["data"] = {
@@ -144,29 +139,16 @@ export const HomePage = () => {
                   </a>
                   <a
                     onClick={async () => {
-                      // if (record.projectId === nowid && DownloadUrl) {
-                      //   window.open(DownloadUrl.data.url, "_self");
-                      // }
-                      // setNowid(record.projectId);
-                      // DownloadRequest(record.projectId)
-                      const response = await http("/project/editDataFile", {
-                        method: "get",
-                        params: { projectId: record.projectId },
-                        responseType: "blob"
-                      }).catch((err) => {
-                        console.error(err)
-                      })
+                      const response = await DownloadRequest(record.projectId)
                       if (!response) return
-                      const blobUrl = window.URL.createObjectURL(response.data as Blob);
+                      const blobUrl = window.URL.createObjectURL(response.data);
 
-
-                      // const url = window.URL.createObjectURL(new Blob([response.data]));
                       const a = document.createElement("a");
                       a.href = blobUrl;
-                      a.download = "editDataFile.json"; // 设置文件名
+                      const fileName = response.responseHeaders['content-disposition'].split('filename=')[1].replace(/['"]/g, '')
+                      a.download = fileName || "editDataFile.json"; // 设置文件名
                       a.click();
                       URL.revokeObjectURL(blobUrl);
-                      console.log('返回的数据', response);
                     }}
                   >
                     导出

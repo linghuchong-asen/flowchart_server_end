@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-19 10:20:08
- * @LastEditTime: 2024-12-04 19:00:46
+ * @LastEditTime: 2024-12-12 15:22:03
  * @Description: 项目管理模块，后端api
  */
 
@@ -43,16 +43,13 @@ export const useGetProject = (params: {
 export const useGetDownload = () => {
   return useMutation(
     (projectId: string) =>
-      http("/project/editDataFile", {
+      http<Blob>("/project/editDataFile", {
         method: "get",
         params: { projectId },
         responseType: "blob",
       }),
     {
-      onSuccess: (response) => {
-        const { data, message } = response;
-        console.log("导出json文件", data);
-      },
+      onSuccess: (response) => {},
       onError: onErrorTips,
     }
   );

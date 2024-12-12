@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2021-11-04 14:51:57
- * @LastEditTime: 2024-12-11 22:59:44
+ * @LastEditTime: 2024-12-12 16:31:52
  * @Description: file content
  */
 import { notification } from "antd";
@@ -46,53 +46,27 @@ export const http = async <T>(
 
   doHttp.interceptors.response.use(
     (response: AxiosResponse) => {
-      console.log("axios响应拦截器中点response", response);
       // 拦截响应，做统一处理
-      if (response.data.code === 0) {
-        const { data, code, message } = response.data;
-        return { data, code, message };
-      } else if (response.config.responseType === "blob") {
-        return response;
-      } else {
-        if (!response.data?.code) {
-          notification.error({
-            message: "发生错误",
-            description: response.data.message || "未知错误",
-          });
-          console.error("接口返回数据异常", response);
-        }
-        return Promise.reject(response.data);
-      }
+      return response;
     },
-    // 说无响应时的处理
+    // 状态码非2xx 的情况
     (error: any) => {
       return Promise.reject(error);
     }
   );
   try {
-    if (config.responseType === "blob") {
-      const data = await doHttp({ url });
-      return data;
-    }
-
+    let response;
     if (config.method !== "get" && config.method !== "delete") {
-      const dataT = await doHttp({ url, data: params });
-      const {
-        data,
-        code,
-        message,
-      }: { data: T; code: number; message: string } = dataT as any;
-      return { data, code, message };
+      response = await doHttp({ url, data: params });
     } else {
       const p = params ? { url, params } : { url };
-      const dataT = await doHttp(p);
-      const {
-        data,
-        code,
-        message,
-      }: { data: T; code: number; message: string } = dataT as any;
-      return { data, code, message };
+      response = await doHttp(p);
     }
+    const responseData =
+      config.responseType === "blob" ? response : response.data;
+    const { data, code, message }: { data: T; code: number; message: string } =
+      responseData;
+    return { data, code, message, responseHeaders: response.headers };
   } catch (err) {
     throw new Error(typeof err === "string" ? err : JSON.stringify(err));
   }
