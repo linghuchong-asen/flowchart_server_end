@@ -12,6 +12,11 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformInterceptor(new Reflector()));
   // 注册全局管道
   app.useGlobalPipes(new ValidationPipe());
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true, // 如果需要发送 cookies 或认证头，设置为 true
+  });
   // process是nodejs的全局变量
   await app.listen(process.env.PORT ?? 3001);
 }

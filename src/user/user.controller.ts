@@ -10,13 +10,16 @@ import {
   ClassSerializerInterceptor,
   UseGuards,
   Req,
+  Header,
+  Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create_user.dto';
 import { UpdateUserDto } from './dto/update_user.dto';
-import { FilesInterceptor } from '@nestjs/platform-express';
 import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import * as path from 'path';
+import * as fs from 'fs';
 
 const logger = new Logger('UserController');
 @Controller('user')
@@ -41,10 +44,10 @@ export class UserController {
   @Patch('update')
   @UseGuards(JwtAuthGuard)
   // @UseGuards(AuthGuard('jwt')) // 这种方式能调用JwtStrategy，但是不能调用到JwtAuthGuard
-  @UseInterceptors(
-    //  NOTE:第一个参数要和传参中file类型的字段名称一致
-    FilesInterceptor('avatar', 10), //FilesInterceptor 是一个特定的拦截器，用于处理多文件上传。会将拦截到的文件交给multer处理
-  )
+  // @UseInterceptors(
+  //   //  NOTE:第一个参数要和传参中file类型的字段名称一致
+  //   FilesInterceptor('avatar', 10), //FilesInterceptor 是一个特定的拦截器，用于处理多文件上传。会将拦截到的文件交给multer处理
+  // )
   async update(
     @UploadedFiles() files: Express.Multer.File[],
     @Body() userInfo: UpdateUserDto,
@@ -64,5 +67,42 @@ export class UserController {
   async getUserInfo(@Req() req) {
     const user = req.user as UserEntity;
     return await this.userService.getUserById(user.id);
+  }
+
+  /**试验：接收Content-Type为application/json,image/png的请求 */
+  @Post('testUpload')
+  test(
+    @Body() body: any,
+    @Req() req,
+    @Res() res,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    const uploadPath = path.join(__dirname, '../../../', 'testUploads');
+    const contentDisposition = req.headers['content-disposition'] as string;
+    // 提取文件名
+    const filenameMatch = contentDisposition.match(/filename="([^"]+)"/);
+    if (!filenameMatch) {
+      return res
+        .status(400)
+        .json({ message: 'Invalid Content-Disposition header' });
+    }
+    const filename = filenameMatch[1];
+
+    // 创建一个文件写入流，保存文件到服务器
+    const writeStream = fs.createWriteStream(path.join(uploadPath, filename));
+    // note:将请求流直接写入文件,适用于客户端单独的上传一个文件的情况;另外一个方式是采用raw-body库封装一个中间件
+    req.pipe(writeStream).on('error', (err) => {
+      console.error('Error writing to file:', err);
+      res.status(500).send('Internal Server Error');
+    });
+
+    req.on('end', () => {
+      res.status(200).send({ message: 'Image uploaded successfully' });
+    });
+
+    req.on('error', (err) => {
+      console.error('Upload error:', err);
+      res.status(500).send({ error: 'File upload failed' });
+    });
   }
 }

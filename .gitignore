@@ -59,3 +59,4 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # 上传文件的存储目录
 /uploads
 /tempFiles
+/testUploads

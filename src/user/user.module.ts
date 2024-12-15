@@ -1,18 +1,20 @@
-import { diskStorage } from 'multer';
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { MulterModule } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+
 import * as path from 'path';
+// const diskStorage = require('@nestjs/platform-express/multer');
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserEntity]),
     MulterModule.register({
       /*  diskStorage 来配置文件存储路径和文件命名规则 */
       storage: diskStorage({
-        destination: path.resolve(__dirname, '../../uploads'), // 指定文件存储的目录
+        destination: path.resolve(__dirname, '../../../uploads'), // 指定文件存储的目录
         filename: (req, file, cb) => {
           // logger.log(path.join('/uploads')); // \uploads 这个实际也是储存在D:\uploads目录下
           // logger.log(path.join(__dirname, '/uploads')); // D:\Users\code\nest-demo\dist\src\user\uploads
