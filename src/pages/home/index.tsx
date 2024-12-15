@@ -1,7 +1,7 @@
 /*
  * @Author: yangsen
  * @Date: 2022-04-13 10:00:33
- * @LastEditTime: 2024-12-12 16:32:32
+ * @LastEditTime: 2024-12-14 16:57:05
  * @Description: file content
  */
 
@@ -145,7 +145,7 @@ export const HomePage = () => {
 
                       const a = document.createElement("a");
                       a.href = blobUrl;
-                      const fileName = response.responseHeaders['content-disposition'].split('filename=')[1].replace(/['"]/g, '')
+                      const fileName = response.responseHeaders['content-disposition']?.split('filename=')[1].replace(/['"]/g, '')
                       a.download = fileName || "editDataFile.json"; // 设置文件名
                       a.click();
                       URL.revokeObjectURL(blobUrl);
