@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { EditorDocumentService } from './editor_document.service';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
-import { SaveEditorDocumentDto } from './dto/save_editor_document.dto';
+import type { SaveEditorDocumentDto } from './dto/save_editor_document.dto';
 
 @Controller('editor') // 参数为路径
 export class EditorDocumentController {
