@@ -6,8 +6,8 @@ const flowchartMockData: IFlowchartJsonResponse[] = Array.from(
   },
   (_, i) => ({
     title: '测试数据' + i,
-    createTime: Date.now().toString(),
-    updateTime: Date.now().toString(),
+    createTime: new Date().toISOString(),
+    updateTime: new Date().toISOString(),
     author: 'test' + i,
   }),
 );
