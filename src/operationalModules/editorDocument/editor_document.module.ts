@@ -3,7 +3,7 @@
  * @Author: yangsen
  * @Date: 2022-04-19 09:31:59
  * @LastEditors: yangsen
- * @LastEditTime: 2024-12-03 17:53:43
+ * @LastEditTime: 2025-01-21 18:42:24
  */
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -13,6 +13,7 @@ import {
 } from './schemas/editor_document.schema';
 import { EditorDocumentController } from './editor_document.controller';
 import { EditorDocumentService } from './editor_document.service';
+import { ProjectSearchModule } from '../projectSearch/project_search.module';
 
 /* 编辑器文档保存至MongoDB模块 */
 @Module({
@@ -22,6 +23,7 @@ import { EditorDocumentService } from './editor_document.service';
     MongooseModule.forFeature([
       { name: EditorDocument.name, schema: EditorDocumentSchema },
     ]),
+    ProjectSearchModule,
   ],
   controllers: [EditorDocumentController],
   providers: [EditorDocumentService],

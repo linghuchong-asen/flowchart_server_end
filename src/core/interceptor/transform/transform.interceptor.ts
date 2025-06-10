@@ -1,3 +1,10 @@
+/*
+ * @Description: 拦截器可以访问到控制器的返回值，这里对响应数据进行处理，统一返回格式
+ * @Author: yangsen
+ * @Date: 2024-12-10 09:31:18
+ * @LastEditors: yangsen
+ * @LastEditTime: 2025-06-10 09:44:24
+ */
 import {
   CallHandler,
   ExecutionContext,

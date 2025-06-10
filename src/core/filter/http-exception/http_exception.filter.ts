@@ -1,3 +1,10 @@
+/*
+ * @Description: filter文件，对于捕获到的异常进行处理
+ * @Author: yangsen
+ * @Date: 2024-11-27 10:29:42
+ * @LastEditors: yangsen
+ * @LastEditTime: 2025-06-10 09:44:07
+ */
 import {
   ArgumentsHost,
   Catch,

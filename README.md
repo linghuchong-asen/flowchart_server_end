@@ -19,6 +19,8 @@
 # 目录结构
 
 ```js
+
+dasddasdjlasd
 │  app.controller.spec.ts
 │  app.controller.ts
 │  app.module.ts
@@ -113,7 +115,10 @@
 └─utils
     └─log
             logger.service.ts
+```
 
+# 启动项目
 
-
+```js
+pnpm start
 ```
