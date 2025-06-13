@@ -36,7 +36,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     private readonly userService: UserService, // private readonly redisCacheService: RedisCacheService,
   ) {
     super({
+      // 从请求头的Authorization: Bearer <token>中提取token
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      // 使用密钥验证签名
       secretOrKey: ConfigService.get('JWT_SECRET', 'secret123456'),
     } as StrategyOptions);
     /*  console.log('验证用jwt', ConfigService.get('JWT_SECRET')); */
