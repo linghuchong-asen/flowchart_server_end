@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {  
+      "type": "node",  
+      "request": "launch",  
+      "name": "Launch Program",  // 调试配置的名称
+      "skipFiles": ["<node_internals>/**","**/node_modules/**"],  // <node_internals>/**表示node.js内部文件
+      "program": "${workspaceFolder}/node_modules/@nestjs/cli/bin/nest.js",  // 指向 Nest CLI 的入口文件
+      "args": ["start", "--watch"],  // 含传递给 Nest CLI 的参数，这里使用 start --watch 来启动开发模式
+      "runtimeExecutable": "node",  
+      "restart": true,  
+      "console": "integratedTerminal",  
+      "internalConsoleOptions": "neverOpen",  
+      "sourceMaps": true,  
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]  // 应该指向你的编译输出文件（如果你使用 TypeScript）
+    }  
+  ]
+}
