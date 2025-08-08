@@ -61,17 +61,7 @@ export class ProjectManagerController {
     return findResult;
   }
 
-  /** 获取指定项目
-   * @param id
-   */
-  /* :id是路径参数占位符，客户端发送一个 GET 请求到 /somepath/123 时，这个处理器会被触发，并且 id 参数会被解析为 123。
-    使用正则只匹配数字路径，否则会错误拦截其他请求，比如后面的editDataFile；所以尽量使用查询参数比较好 */
-  /*  */
-  @Get('/:id(\\d+)/')
-  async findById(@Param('id') id) {
-    const projectResult = await this.projectService.findById(id);
-    return projectResult;
-  }
+ 
 
   /** 更新项目信息
    * @param id
@@ -125,5 +115,15 @@ export class ProjectManagerController {
       type: 'application/json',
       disposition: `attachment; filename=${fileName}`, // 浏览器直接访问路由将直接弹出保存窗口
     });
+  }
+
+   /** 获取指定项目
+   * @param id
+   */
+  /* 这个路由放在editDataFile路由后面，因为nest的路由是按注册顺序和字面匹配优先规则来的；:id是一个不确定的路由；应该放在确定性路由的后面，不然editDataFile路由会被:id路由错误的拦截到 */
+  @Get(':id')
+  async findById(@Param('id') id) {
+    const projectResult = await this.projectService.findById(id);
+    return projectResult;
   }
 }
