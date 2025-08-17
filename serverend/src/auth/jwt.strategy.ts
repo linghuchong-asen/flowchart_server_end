@@ -3,7 +3,7 @@
  * @Author: yangsen
  * @Date: 2024-11-27 10:29:42
  * @LastEditors: yangsen
- * @LastEditTime: 2024-11-29 10:33:43
+ * @LastEditTime: 2025-08-17 11:04:34
  */
 // import { RedisCacheService } from '../jwtRedis/redis_cache.service';
 import { ConfigService } from '@nestjs/config';
@@ -40,7 +40,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       // 使用密钥验证签名
       secretOrKey: ConfigService.get('JWT_SECRET', 'secret123456'),
-    } as StrategyOptions);
+      passReqToCallback: false,
+    } );
     /*  console.log('验证用jwt', ConfigService.get('JWT_SECRET')); */
   }
 
