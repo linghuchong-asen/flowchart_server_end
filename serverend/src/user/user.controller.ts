@@ -20,7 +20,6 @@ import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import * as path from 'path';
 import * as fs from 'fs';
-import { ApiOperation,ApiProperty } from '@nestjs/swagger';
 
 const logger = new Logger('UserController');
 @Controller('user')
