@@ -12,6 +12,7 @@ import * as path from 'path';
 // import { RedisCacheModule } from './jwtRedis/redis_cache.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EditorDocumentModule } from './operationalModules/editorDocument/editor_document.module';
+import { AiModule } from './ai/ai.module';
 // import { ProjectSearchModule } from './operationalModules/projectSearch/project_search.module';
 
 /* nest项目可以理解为由好多模块组成的，app.module.ts是项目的根模块 */
@@ -66,6 +67,7 @@ import { EditorDocumentModule } from './operationalModules/editorDocument/editor
     // RedisCacheModule,
     EditorDocumentModule,
     // ProjectSearchModule,
+    AiModule
   ],
   controllers: [AppController], // 处理http请求，包括路由控制，向客户端返回响应
   providers: [AppService], // 服务提供者，处理具体的业务逻辑
