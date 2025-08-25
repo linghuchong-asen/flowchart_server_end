@@ -1,20 +1,21 @@
 // apps/server/src/modules/ai/memory/buffer.memory.ts
-import { BaseChatMemory, BaseChatMemoryInput } from "@langchain/core/memory";
+import { BaseChatMessageHistory } from "@langchain/core/chat_history";
 import { BaseMessage, HumanMessage, AIMessage } from "@langchain/core/messages";
 
-export interface BufferMemoryInput extends BaseChatMemoryInput {
+export interface BufferMemoryInput {
   redisClient: { 
     lrange: Function; 
     rpush: Function; 
     ltrim: Function 
   };
+  sessionId: string;
 }
 
-export class BufferMemory extends BaseChatMemory {
+export class BufferMemory extends BaseChatMessageHistory {
   private redisClient: any;
   private sessionId: string;
 
-  constructor(fields: BufferMemoryInput & { sessionId: string }) {
+  constructor(fields: BufferMemoryInput) {
     super(fields);
     this.redisClient = fields.redisClient;
     this.sessionId = fields.sessionId;
@@ -37,7 +38,8 @@ export class BufferMemory extends BaseChatMemory {
     await this.redisClient.ltrim(this.key(), -12, -1); // 最近 12 条
   }
 
-  async loadMemoryVariables(_values: Record<string, any>): Promise<Record<string, any>> {
+  // 实现BaseChatMessageHistory的抽象方法
+  async getMessages(): Promise<BaseMessage[]> {
     const arr: string[] = await this.redisClient.lrange(this.key(), 0, -1);
     const msgs = arr.map(s => JSON.parse(s));
     const messages: BaseMessage[] = msgs.map(m => 
@@ -46,15 +48,13 @@ export class BufferMemory extends BaseChatMemory {
         : new AIMessage(m.content)
     );
     
-    return { history: messages };
+    return messages;
   }
 
-  async saveContext(
-    inputValues: Record<string, any>,
-    outputValues: Record<string, any>
-  ): Promise<void> {
-    await this.append('user', Object.values(inputValues)[0]);
-    await this.append('assistant', Object.values(outputValues)[0]);
+  // 实现BaseChatMessageHistory的抽象方法
+  async addMessage(message: BaseMessage): Promise<void> {
+    const role = message._getType() === "human" ? "user" : "assistant";
+    await this.append(role, message.content);
   }
 
   async clear(): Promise<void> {

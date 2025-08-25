@@ -6,13 +6,14 @@ export interface VectorMemoryInput extends BaseRetrieverInput {
   client: {
     query: (args: { projectId: string; text: string; topK: number }) => Promise<Array<{ id: string; text: string; score: number }>>;
   };
+  projectId: string;
 }
 
 export class VectorMemory extends BaseRetriever {
   private client: any;
   private projectId: string;
 
-  constructor(fields: VectorMemoryInput & { projectId: string }) {
+  constructor(fields: VectorMemoryInput) {
     super(fields);
     this.client = fields.client;
     this.projectId = fields.projectId;

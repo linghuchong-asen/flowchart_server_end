@@ -13,6 +13,7 @@ import * as path from 'path';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EditorDocumentModule } from './operationalModules/editorDocument/editor_document.module';
 import { AiModule } from './ai/ai.module';
+import { PgSummaryConfig } from './ai/memory/pg.config';
 // import { ProjectSearchModule } from './operationalModules/projectSearch/project_search.module';
 
 /* nest项目可以理解为由好多模块组成的，app.module.ts是项目的根模块 */
@@ -39,6 +40,7 @@ import { AiModule } from './ai/ai.module';
         synchronize: true, // 根据实体自动创建数据库表，生产环境建议关闭
       }),
     }),
+    PgSummaryConfig,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
