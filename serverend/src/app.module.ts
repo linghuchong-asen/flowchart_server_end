@@ -12,6 +12,8 @@ import * as path from 'path';
 // import { RedisCacheModule } from './jwtRedis/redis_cache.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EditorDocumentModule } from './operationalModules/editorDocument/editor_document.module';
+import { AiModule } from './ai/ai.module';
+import { PgSummaryConfig } from './ai/memory/pg.config';
 // import { ProjectSearchModule } from './operationalModules/projectSearch/project_search.module';
 
 /* nest项目可以理解为由好多模块组成的，app.module.ts是项目的根模块 */
@@ -38,6 +40,7 @@ import { EditorDocumentModule } from './operationalModules/editorDocument/editor
         synchronize: true, // 根据实体自动创建数据库表，生产环境建议关闭
       }),
     }),
+    PgSummaryConfig,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -66,6 +69,7 @@ import { EditorDocumentModule } from './operationalModules/editorDocument/editor
     // RedisCacheModule,
     EditorDocumentModule,
     // ProjectSearchModule,
+    AiModule
   ],
   controllers: [AppController], // 处理http请求，包括路由控制，向客户端返回响应
   providers: [AppService], // 服务提供者，处理具体的业务逻辑

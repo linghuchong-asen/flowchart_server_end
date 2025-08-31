@@ -1,0 +1,19 @@
+{
+  "name": "ai-diagram",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "concurrently -n front server -c blue green \"pnpm start:frontend\" \"pnpm start:serverend\"",
+    "start:frontend": "cd frontend && pnpm start",
+    "start:serverend": "cd serverend && pnpm start",
+    "build": "concurrently \"pnpm build:frontend\" \"pnpm build:serverend\"",
+    "build:frontend": "cd frontend && pnpm build",
+    "build:serverend": "cd serverend && pnpm build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.0.0"
+  }
+}
