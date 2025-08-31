@@ -1,3 +1,10 @@
+/*
+ * @Description: 连接pg数据库
+ * @Author: yangsen
+ * @Date: 2025-08-31 17:21:45
+ * @LastEditors: yangsen
+ * @LastEditTime: 2025-08-31 18:15:20
+ */
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ConversationSummary } from './conversation_summary.entity';
