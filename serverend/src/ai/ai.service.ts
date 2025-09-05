@@ -27,11 +27,6 @@ export class AiService {
   private vector = new VectorMemory({
     query: async () => [],
   });
-  // private contextStitch = buildContextStitcher({
-  //   buffer: this.buffer,
-  //   summary: this.summary,
-  //   vector: this.vector,
-  // });、
 
   // 使用新的 Qwen 适配器
   private llmAdapter = new QwenAdapter({
