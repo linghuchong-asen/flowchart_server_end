@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import * as Prompts from './prompts';
 import { buildContextStitcher } from './memory/memory.factory';
 import { BufferMemory } from './memory/buffer.memory';
-import { SummaryMemory } from './memory/summary/summary.memory';
+import { SummaryMemory } from './memory/summary/summary.memory.service';
 import { VectorMemory } from './memory/vector.memory';
 import { toSseObservable } from './adapters';
 import { LayoutTool } from './tools/layout.tool';
@@ -27,22 +27,58 @@ export class AiService {
   private vector = new VectorMemory({
     query: async () => [],
   });
-  private contextStitch = buildContextStitcher({
-    buffer: this.buffer,
-    summary: this.summary,
-    vector: this.vector,
-  });
+  // private contextStitch = buildContextStitcher({
+  //   buffer: this.buffer,
+  //   summary: this.summary,
+  //   vector: this.vector,
+  // });、
 
   // 使用新的 Qwen 适配器
   private llmAdapter = new QwenAdapter({
     apiKey: process.env.DASHSCOPE_API_KEY || 'your-api-key-here',
-    baseUrl: process.env.DASHSCOPE_BASE_URL || "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    model: process.env.QWEN_MODEL || "qwen-plus"
+    baseUrl:
+      process.env.DASHSCOPE_BASE_URL ||
+      'https://dashscope.aliyuncs.com/compatible-mode/v1',
+    model: process.env.QWEN_MODEL || 'qwen-plus',
   });
 
   private validator = new ValidatorTool();
   private layout = new LayoutTool();
 
+  // 将memory.factory.ts中的逻辑移到这里
+  private async buildContext({
+    sessionId,
+    projectId,
+    userInput,
+  }: {
+    sessionId: string;
+    projectId: string;
+    userInput: string;
+  }): Promise<string> {
+    // 从 LangChain 内存组件中获取数据
+    const bufferData = await this.buffer.getMessages();
+    const summaryData = await this.summary.loadMemoryVariables({});
+    const vectorData = await this.vector.getRelevantDocuments(userInput);
+
+    const bufferText = Array.isArray(bufferData)
+      ? bufferData
+          .map((msg: any) => `${msg._getType().toUpperCase()}: ${msg.content}`)
+          .join('\n')
+      : '';
+
+    const summaryText = summaryData.summary || '';
+    const vectorText = vectorData
+      .map((doc) => `- ${doc.pageContent}`)
+      .join('\n');
+
+    return [
+      summaryText && `## Summary\n${summaryText}`,
+      bufferText && `## Recent Turns\n${bufferText}`,
+      vectorText && `## Retrieved\n${vectorText}`,
+    ]
+      .filter(Boolean)
+      .join('\n\n');
+  }
   streamGenerate(dto: {
     userId: string;
     projectId: string;
@@ -57,7 +93,7 @@ export class AiService {
       (async () => {
         try {
           // 1) 组上下文
-          const context = await this.contextStitch({
+          const context = await this.buildContext({
             sessionId,
             projectId: dto.projectId,
             userInput: dto.input,
@@ -69,7 +105,7 @@ export class AiService {
               validate: (g) => this.validator.validate(g),
               layout: (g) => this.layout.autoLayout(g),
             },
-            prompts: Prompts
+            prompts: Prompts,
           });
 
           const input: GenerateInput = {
@@ -81,19 +117,23 @@ export class AiService {
             context,
           };
 
-          const out = await generateChain.run(
-            input,
-            (evt) => push(evt as any)
-          );
+          const out = await generateChain.run(input, (evt) => push(evt as any));
 
           // 3) 持久化：把用户输入与简要结果追加到记忆（示例）
           await this.buffer.append(sessionId, 'user', dto.input);
-          await this.buffer.append(sessionId, 'assistant', JSON.stringify(out.plan_bullets));
+          await this.buffer.append(
+            sessionId,
+            'assistant',
+            JSON.stringify(out.plan_bullets),
+          );
 
           // 4) 收尾
           done({ type: 'done', data: { cost: { input: 0, output: 0 } } });
         } catch (e: any) {
-          push({ type: 'error', data: { message: e?.message || 'AI 生成失败' } });
+          push({
+            type: 'error',
+            data: { message: e?.message || 'AI 生成失败' },
+          });
           done();
         }
       })().catch(fail);
