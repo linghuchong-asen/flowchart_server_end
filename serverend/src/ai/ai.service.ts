@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import * as Prompts from './prompts';
 import { buildContextStitcher } from './memory/memory.factory';
 import { BufferMemory } from './memory/buffer.memory';
-import { SummaryMemory } from './memory/summary.memory';
+import { SummaryMemory } from './memory/summary/summary.memory';
 import { VectorMemory } from './memory/vector.memory';
 import { toSseObservable } from './adapters';
 import { LayoutTool } from './tools/layout.tool';

@@ -1,6 +1,6 @@
 // apps/server/src/modules/ai/memory/memory.factory.ts
 import { BufferMemory } from './buffer.memory';
-import { SummaryMemory } from './summary.memory';
+import { SummaryMemory } from './summary/summary.memory';
 import { VectorMemory } from './vector.memory';
 import { Repository } from 'typeorm';
 import { ConversationSummary } from './conversation_summary.entity';
